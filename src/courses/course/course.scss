@@ -38,6 +38,7 @@
         justify-content: space-between;
         align-items: flex-start;
         width: 250px;
+        
 
         .left {
             .name {
@@ -45,6 +46,7 @@
                 font-weight: bold;
                 margin: 10px 0 5px 0;
                 text-align: left;
+
             }
 
             .duration {
@@ -52,6 +54,7 @@
                 padding: 0;
                 display: flex;
                 align-items: center;
+
 
                 .clock {
                     color: grey;
