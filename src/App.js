@@ -1,9 +1,12 @@
 import './App.css';
+import Nav from './nav/nav.jsx';
+import Courses from './courses/courses.jsx';
 
 function App() {
   return (
     <div className="App">
-      <h1>Eureka</h1>
+      <Nav />
+      <Courses />
     </div>
   );
 }

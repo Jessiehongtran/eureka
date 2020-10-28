@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+
+    .courses {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        padding: 60px 40px 40px 40px;
+        background-image: linear-gradient( #FDFBFB, #EBEDEE);
+        min-height: 100vh;
+
+        @media (max-width: 1200px){
+            padding: 20px 0 0 0 ;
+        }
+    }
+}
