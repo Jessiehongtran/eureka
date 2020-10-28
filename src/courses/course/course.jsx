@@ -18,11 +18,11 @@ export default class Course extends React.Component {
 
     render(){
 
-        const { course } = this.props;
+        const { course, history } = this.props;
         const { rating } = this.state;
 
         return (
-                <div className="course">
+                <div className="course" onClick={() => history.push('/details')}>
                     <div className="image">
                             <img src={course.banner} />
                     </div>

@@ -19,7 +19,7 @@ export default class Details extends React.Component {
                 <div className="details">
                     <div className="top">
                         <p className="date">Friday, November 6, 2020</p>
-                        <h2 className="title">Online: Book Club Meeting</h2>
+                        <h2 className="title">Online: Book Reading Training</h2>
                     </div>
                     <div className="main">
                         <div className="details">

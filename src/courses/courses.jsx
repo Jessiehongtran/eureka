@@ -116,7 +116,12 @@ export default class Courses extends React.Component {
             <div className="container">
                 <div className="courses">
                     {courses.length > 0
-                    ? courses.map(course => <Course key={course.id} course={course}/>)
+                    ? courses.map(course => 
+                        <Course 
+                            key={course.id} 
+                            course={course} 
+                            history={this.props.history}
+                        />)
                     : null} 
                 </div>
             </div>
