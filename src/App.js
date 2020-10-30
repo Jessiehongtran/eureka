@@ -3,6 +3,8 @@ import Nav from './nav/nav.jsx';
 import Courses from './courses/courses.jsx';
 import Details from './courses/courseDetails/details';
 import NavInside from './nav/navInside/navInside';
+import DragDrop1 from './modules/dragdrop1/dragdrop1';
+import DragDrop2 from './modules/dragdrop2/dragdrop2';
 import { Route } from 'react-router-dom';
 
 function App() {
@@ -28,7 +30,31 @@ function App() {
             return (
               <>
                 <NavInside/>
-                <Details {...props}/>
+                <Details {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/dragdrop/1"
+        render = {
+          props => {
+            return (
+              <>
+                <DragDrop1 {...props} />
+              </>
+            )
+          }
+        }
+      />
+       <Route 
+        exact path="/dragdrop/2"
+        render = {
+          props => {
+            return (
+              <>
+                <DragDrop2 {...props} />
               </>
             )
           }

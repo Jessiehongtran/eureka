@@ -70,7 +70,8 @@ export default class Details extends React.Component {
                                             Online training
                                         </div>
                                         <div className="link">
-                                            Link visible for attendees
+                                            {/* Link visible for attendees */}
+                                            <button className="launch-btn">Launch</button>
                                         </div>
                                     </div>
                                 </div>  

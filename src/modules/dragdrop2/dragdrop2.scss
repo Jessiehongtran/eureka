@@ -1,0 +1,45 @@
+.container {
+    position: relative;
+
+    .ques {
+        font-size: 18px;
+        
+    }
+
+    .explain {
+        font-style: italic;
+        color: grey;
+        font-size: 14px;
+    }
+
+    .limit {
+        color: grey;
+        font-size: 14px;
+    }
+
+    .answers {
+        background-color: #F3F3F3;
+        border-radius: 4px;
+        padding: 10px 20px 10px 20px;
+        min-width: 200px;
+        height: 200px;
+
+
+        .each_ans {
+            padding: 5px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            position: absolute;
+            text-align: center;
+            width: 100px;
+            height: 25px;
+            cursor: move;
+        }
+
+        .each_ans:hover {
+            background-color: grey;
+        }
+    }
+
+    
+}
