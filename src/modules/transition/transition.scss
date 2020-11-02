@@ -15,7 +15,8 @@
 
     img {
         width: 50%;
-        transition: width 1s;
+        transition: all 1s ease;
+      
     }
     
     img:hover {
@@ -37,7 +38,8 @@
         img {
             visibility: hidden;
             width: 0%;
-            transition: width 1s;
+            transition: all 1s ease;
+           
         }
     }
     
