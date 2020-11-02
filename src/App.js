@@ -5,7 +5,11 @@ import Details from './courses/courseDetails/details';
 import NavInside from './nav/navInside/navInside';
 import DragDrop1 from './modules/dragdrop1/dragdrop1';
 import DragDrop2 from './modules/dragdrop2/dragdrop2';
+import Hover from './modules/hover/hover';
+import Overview from './modules/overview/overview';
+import Type from './modules/type/type';
 import { Route } from 'react-router-dom';
+
 
 function App() {
   return (
@@ -36,6 +40,18 @@ function App() {
           }
         }
       />
+       <Route 
+        exact path="/modules"
+        render = {
+          props => {
+            return (
+              <>
+                <Overview {...props} />
+              </>
+            )
+          }
+        }
+      />
       <Route 
         exact path="/dragdrop/1"
         render = {
@@ -55,6 +71,30 @@ function App() {
             return (
               <>
                 <DragDrop2 {...props} />
+              </>
+            )
+          }
+        }
+      />
+       <Route 
+        exact path="/hover"
+        render = {
+          props => {
+            return (
+              <>
+                <Hover {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/type"
+        render = {
+          props => {
+            return (
+              <>
+                <Type {...props} />
               </>
             )
           }

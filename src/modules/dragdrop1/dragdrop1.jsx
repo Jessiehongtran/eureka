@@ -1,5 +1,6 @@
 import React from 'react';
 import './dragdrop1.scss'
+import { Link } from 'react-router-dom'
 
 export default class DragDrop1 extends React.Component {
     constructor(props){
@@ -165,6 +166,7 @@ export default class DragDrop1 extends React.Component {
                         {new_changes.not_sure}
                     </div>
                 </div>
+                <p><Link to="/modules">Home</Link></p>
             </div>
         )
     }

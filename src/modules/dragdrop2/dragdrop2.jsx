@@ -1,5 +1,6 @@
 import React from 'react';
-import './dragdrop2.scss'
+import './dragdrop2.scss';
+import { Link } from 'react-router-dom'
 
 export default class DragDrop2 extends React.Component {
     constructor(props){
@@ -106,6 +107,7 @@ export default class DragDrop2 extends React.Component {
                     : null}
                 </div>
                 <p className="limit">Least likely</p>
+                <p><Link to="/modules">Home</Link></p>
             </div>
         )
     }
