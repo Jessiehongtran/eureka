@@ -9,6 +9,7 @@ import Hover from './modules/hover/hover';
 import Overview from './modules/overview/overview';
 import Type from './modules/type/type';
 import WordRain from './modules/wordRain/wordRain';
+import Transition from './modules/transition/transition';
 import { Route } from 'react-router-dom';
 
 
@@ -108,6 +109,18 @@ function App() {
             return (
               <>
                 <WordRain {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/transition"
+        render = {
+          props => {
+            return (
+              <>
+                <Transition {...props} />
               </>
             )
           }

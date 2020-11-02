@@ -1,0 +1,57 @@
+.expand {
+    width: 100px;
+    height: 100px;
+    background: #58E6CC;
+    transition: width 1s;
+}
+
+.expand:hover {
+    width: 300px;
+}
+
+.magic {
+    display: flex;
+    align-items: center;
+
+    img {
+        width: 50%;
+        transition: width 1s;
+    }
+    
+    img:hover {
+        width: 40%;
+    }
+    
+    .appear {
+        height: 300px;
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        p {
+            border: 1px dashed grey;
+            padding: 10px
+        }
+    
+        img {
+            visibility: hidden;
+            width: 0%;
+            transition: width 1s;
+        }
+    }
+    
+    .appear:hover {
+        p {
+            display: none;
+        }
+        img {
+            visibility: visible;
+            width: 100%;
+        }
+    }
+}
+
+
+
+
