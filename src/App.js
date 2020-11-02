@@ -8,6 +8,7 @@ import DragDrop2 from './modules/dragdrop2/dragdrop2';
 import Hover from './modules/hover/hover';
 import Overview from './modules/overview/overview';
 import Type from './modules/type/type';
+import WordRain from './modules/wordRain/wordRain';
 import { Route } from 'react-router-dom';
 
 
@@ -95,6 +96,18 @@ function App() {
             return (
               <>
                 <Type {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/rain"
+        render = {
+          props => {
+            return (
+              <>
+                <WordRain {...props} />
               </>
             )
           }
