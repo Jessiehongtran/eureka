@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './wordRain.scss'
 
 export default class WordRain extends React.Component {
@@ -29,11 +30,14 @@ export default class WordRain extends React.Component {
     render(){
      
         return (
-            <div className="rain">
-                {!this.state.showText
-                ? <button onClick={() => this.raining()}>Get a nutshell</button>
-                : <p className="text">{this.state.text}</p>}
-            </div>
+            <>
+                <div className="rain">
+                    {!this.state.showText
+                    ? <button onClick={() => this.raining()}>Get a nutshell</button>
+                    : <p className="text">{this.state.text}</p>}
+                </div>
+                <p><Link to="/modules">Home</Link></p> 
+            </>
         )
     }
 }
