@@ -10,6 +10,8 @@ import Overview from './modules/overview/overview';
 import Type from './modules/type/type';
 import WordRain from './modules/wordRain/wordRain';
 import Transition from './modules/transition/transition';
+import Slider from './modules/slider/slider';
+import Quiz from './modules/quiz/quiz';
 import { Route } from 'react-router-dom';
 
 
@@ -121,6 +123,30 @@ function App() {
             return (
               <>
                 <Transition {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/slider"
+        render = {
+          props => {
+            return (
+              <>
+                <Slider {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/quiz"
+        render = {
+          props => {
+            return (
+              <>
+                <Quiz {...props} />
               </>
             )
           }
