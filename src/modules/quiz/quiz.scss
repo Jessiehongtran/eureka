@@ -42,6 +42,24 @@
             padding-top: 20px;
             border: 1px dashed grey;
             margin: 20px 0 20px 0;
+
+            .upload {
+                font-family: 'Poppins', sans-serif;
+                border: none;
+                background-color: grey;
+                border-radius: 4px;
+                padding: 5px 8px 5px 8px;
+                color: white;
+
+                .upload-input {
+                    display: none
+                }
+            }
+
+            .upload:focus {
+                outline: none
+
+            }
         }
 
         .answers {
