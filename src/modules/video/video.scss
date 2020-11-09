@@ -1,0 +1,48 @@
+.video-container {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    background-color: #F4F4F5;
+    min-height: 100vh;
+
+    .header {
+        width: 100%;
+
+        input {
+            width: 60%;
+            min-height: 80px;
+            padding: 0 20px 0 20px;
+            font-size: 24px;
+            background-color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        input:focus {
+            outline: none
+        }
+    }
+
+    .upload {
+        margin: 30px 0 30px 0;
+
+
+        .video-upload {
+            font-family: 'Poppins', sans-serif;
+            border: none;
+            background-color: grey;
+            border-radius: 4px;
+            padding: 5px 8px 5px 8px;
+            color: white;
+            
+
+            input {
+                display: none
+            }
+        }
+    }
+
+    .video-pre {
+        
+    }
+}

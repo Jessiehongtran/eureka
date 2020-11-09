@@ -12,6 +12,7 @@ import WordRain from './modules/wordRain/wordRain';
 import Transition from './modules/transition/transition';
 import Slider from './modules/slider/slider';
 import Quiz from './modules/quiz/quiz';
+import Video from './modules/video/video';
 import { Route } from 'react-router-dom';
 
 
@@ -147,6 +148,18 @@ function App() {
             return (
               <>
                 <Quiz {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/video"
+        render = {
+          props => {
+            return (
+              <>
+                <Video {...props} />
               </>
             )
           }
