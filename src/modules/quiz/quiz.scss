@@ -1,6 +1,8 @@
 .quiz {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     background-color: #F4F4F5;
     min-height: 100vh;
     padding-top: 80px;
@@ -30,6 +32,29 @@
 
         .ques-input:focus {
             outline: none
+        }
+
+        .image-container {
+            width: 60%;
+            padding: 10px;
+            border: 1px dashed grey;
+            border-radius: 2px;
+
+            .delete-icon {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                margin-left: 25px;
+                margin-top: -25px;
+                position: relative;
+                font-size: 28px;
+                color: grey
+            }
+
+            .image-frame {
+                width: 100%;
+                margin: 0;
+            }
         }
 
         .image {
@@ -67,10 +92,10 @@
             flex-wrap: wrap;
             justify-content: center;
             width: 100%;
+            
 
             .each {
                 width: 40%;
-                // background-color: orange;
                 margin: 20px 20px 0 0;
 
                 .ans-input {
@@ -86,13 +111,23 @@
 
                 .check-ans {
                     z-index: 1;
-                    margin-left: -50px;
+                    margin-left: -40px;
                 }
 
                 .ans-input:focus {
                     outline: none;
                 }
             }
+        }
+
+        .create-btn {
+            font-family: 'Poppins', sans-serif;
+            border: 1px solid grey;
+            // background-color: grey;
+            border-radius: 4px;
+            padding: 5px 12px 5px 12px;
+            color: black;
+            margin-top: 50px;
         }
     }
 }

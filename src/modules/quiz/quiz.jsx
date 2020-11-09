@@ -1,6 +1,9 @@
 import React from 'react';
 import './quiz.scss';
-import axios from 'axios'
+import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom'
 
 export default class Quiz extends React.Component {
     constructor(props){
@@ -10,12 +13,16 @@ export default class Quiz extends React.Component {
             answers: [],
             questionID : 0,
             answerIDs: [0,0,0,0],
+            imgUrl: "",
+            showUploadFunc: true
         }
         this.saveQuestion = this.saveQuestion.bind(this)
         this.saveAnswer = this.saveAnswer.bind(this)
         this.updateCorrectAns = this.updateCorrectAns.bind(this)
         this.postQuestion = this.postQuestion.bind(this)
         this.postAnswer = this.postAnswer.bind(this)
+        this.handleChangeImage = this.handleChangeImage.bind(this)
+        this.toggleUploadImage = this.toggleUploadImage.bind(this)
     }
 
     async postQuestion(question){
@@ -129,6 +136,10 @@ export default class Quiz extends React.Component {
 
     }
 
+    toggleUploadImage(){
+        this.setState({showUploadFunc : !this.state.showUploadFunc})
+    }
+
     updateCorrectAns(e){
         const ansID = parseInt(e.target.value)
         //update in backend this answer is correct
@@ -139,9 +150,23 @@ export default class Quiz extends React.Component {
         }
     }
 
+    handleChangeImage(e){
+        console.log('files', e.target.files)
+        const img = e.target.files[0]
+        var reader = new FileReader();
+        reader.readAsDataURL(img)
+        reader.onloadend = () => {
+            this.setState({imgUrl: reader.result})
+        }
+        this.toggleUploadImage()
+
+
+    }
+
     render(){
         const { question, answerIDs } = this.state
         console.log('question', question)
+        console.log('url', this.state.imgUrl)
 
         return (
             <div className="quiz">
@@ -153,16 +178,28 @@ export default class Quiz extends React.Component {
                         onBlur= {this.saveQuestion}
                         
                     />
-                    <div className="image">
+                    {!this.state.showUploadFunc 
+                    ? <div className="image-container">
+                        <div className="delete-icon">
+                            <FontAwesomeIcon
+                                icon = {faTimesCircle}
+                                onClick={() => this.toggleUploadImage()}
+                            />
+                        </div>
+                        <img src={this.state.imgUrl} className="image-frame" />
+                      </div>
+                    : <div className="image">
                         <p>Image goes here</p>
                         <label className="upload">
                             <input 
                                 type="file"
                                 className="upload-input"
+                                onChange={this.handleChangeImage}
                             />
                             Upload image
                         </label>
                     </div>
+                    }
                     <div className="answers">
                         <div className="each">
                             <input
@@ -222,7 +259,9 @@ export default class Quiz extends React.Component {
                             />
                         </div>
                     </div>
+                    <button className="create-btn">Create</button>
                 </div>
+                <p><Link to="/modules">Home</Link></p>
             </div>
         )
     }

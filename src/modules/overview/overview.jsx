@@ -28,6 +28,7 @@ export default class Overview extends React.Component {
                 <li><Link to="/rain">Words falling out</Link></li>
                 <li><Link to="/transition">Transition</Link></li>
                 <li><Link to="/slider">Slider</Link></li>
+                <li><Link to="/quiz">Quiz</Link></li>
             </ol>
         )
     }
