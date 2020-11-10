@@ -38,6 +38,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: flex-start;
+                flex-wrap: wrap;
                 margin: 0 0 5px 0;
 
                 .name {
@@ -45,6 +46,7 @@
                     margin: 0;
                     font-weight: 550;
                     font-size: 16px;
+                    max-width: 60%;
                 }
 
                 .rating {

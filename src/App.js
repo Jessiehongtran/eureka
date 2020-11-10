@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
+import { Route } from 'react-router-dom';
 import Nav from './nav/nav.jsx';
 import Courses from './courses/courses.jsx';
 import Details from './courses/courseDetails/details';
@@ -14,7 +15,7 @@ import Transition from './modules/transition/transition';
 import Slider from './modules/slider/slider';
 import Quiz from './modules/quiz/quiz';
 import Video from './modules/video/video';
-import { Route } from 'react-router-dom';
+import CreateCourse from './courses/createCourse/createCourse';
 
 
 const App = () => {
@@ -43,6 +44,18 @@ const App = () => {
               <>
                 <NavInside/>
                 <Details {...props} openedCourse={openedCourse} />
+              </>
+            )
+          }
+        }
+      />
+       <Route 
+        exact path="/create"
+        render = {
+          props => {
+            return (
+              <>
+                <CreateCourse {...props} />
               </>
             )
           }

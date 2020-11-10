@@ -12,7 +12,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "At Facebook, we believe that understanding and managing unconscious bias can help us build stronger, more diverse and inclusive organizations.These videos are designed to help us recognize our biases so we can reduce their negative effects in the workplace. Surfacing and countering unconscious bias is an essential step towards becoming the people and companies we want to be.",
-        link: "https://managingbias.fb.com/"
+        link: "https://managingbias.fb.com/",
+        will_learn: []
     },
     {
         id: 2,
@@ -27,7 +28,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "The moment is tense, and baffling. You look at each other with surprise, hurt, and disappointment. How did this misunderstanding occur? How did you end up at such cross-purposes? What planet is this person from, anyway?!? Unfortunately, some of us have found ourselves in this situation. Maybe it occurred over a video call with a colleague, in a Zoom with family, or during a recent shelter-in-place moment in your household. From the Covid-19 pandemic to the Black Lives Matter movement, 2020 has been a challenging year. But these challenges have some people on the path to learning about, advocating for, and standing with perspectives that are not their own. Others are standing in opposition, holding opposing viewpoints that are dividing our country and pitting groups against each other. What causes some people to seek consensus, understanding, and collaboration, while others become even more entrenched in the status quo? How might people, despite differences in experience, thought, and action, find common ground and build solutions that are mutually beneficial? We need to learn how to understand the perspectives of others. Others view us differently than we view ourselves, and our shared circumstances don’t result in shared conclusions. However, our goals still have equal value. To understand this, we need to engage in perspective taking.",
-        link: "https://ampcreative.com/what-is-perspective-taking/"
+        link: "https://ampcreative.com/what-is-perspective-taking/",
+        will_learn: []
     },
     {
         id: 3,
@@ -42,7 +44,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "Since the passage of GDPR, data privacy and the need for privacy training have moved to the forefront of concern for organizations that handle any form of customer or employee data – in other words, every organization. In addition to keeping personally identifiable information and other sensitive data safe from hackers, businesses must also ensure that employees possess the critical knowledge needed to understand data privacy and practice safe data handling and regulatory compliance.",
-        link: "https://www.globallearningsystems.com/privacy-and-data-protection-essentials/"
+        link: "https://www.globallearningsystems.com/privacy-and-data-protection-essentials/",
+        will_learn: []
     },
     {
         id: 4,
@@ -57,7 +60,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "Leadership and management training courses are specialized programs designed to help you learn new leadership techniques and refine old skills to run your team, including assertive communication, motivation methods, and coaching. Leadership training is ideal for anyone in a supervisory role, from people who have just stepped up to a new position to more experienced managers who want to keep on top of their game.",
-        link: "https://www.scienceofpeople.com/leadership-training/"
+        link: "https://www.scienceofpeople.com/leadership-training/",
+        will_learn: []
     },
     {
         id: 5,
@@ -72,7 +76,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "When scientists learn better communication skills, they not only convey their research to a broader audience but also become better connected to their own scientific communities. Communication skills are among the most important skills we can provide for new scientists; they enable better networking, collaborating, teaching, and leading. These skills will serve a scientist, and the scientific community at large, throughout the scientist’s entire career. Although the primary goal of science communication training is to improve a scientist’s ability to communicate with the public and research peers, the potential of this training to provide a sense of community and self-awareness is of equal importance. We believe that science communication training sessions or programs (trainings), designed with these additional goals in mind, can benefit a department, school, program, or meeting in addition to benefiting the individual participants.",
-        link: "https://eos.org/opinions/the-unexpected-benefits-of-science-communication-training"
+        link: "https://eos.org/opinions/the-unexpected-benefits-of-science-communication-training",
+        will_learn: []
     },
     {
         id: 6,
@@ -87,7 +92,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "Of the many strategies that have been adopted by organisations to enhance their innovativeness, conducting creativity training for employees is one of the most widespread. Within this chapter, I will discuss how widespread the use of creativity training is, the main types of interventions used in organisations and review the literature for evidence of their effectiveness. Finally, integrating lessons from the literature with my own experience of developing and implementing a new innovation training model (CLEAR IDEAS) for organisations, the chapter will conclude with a set of practical guidelines on what makes for more effective creativity training interventions.",
-        link: "https://link.springer.com/chapter/10.1057%2F9781137465191_19"
+        link: "https://link.springer.com/chapter/10.1057%2F9781137465191_19",
+        will_learn: []
     },
     {
         id: 7,
@@ -102,7 +108,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "More and more, we live in bubbles. Most of us are surrounded by people who look like us, vote like us, earn like us, spend money like us, have educations like us and worship like us. The result is an empathy deficit, and it’s at the root of many of our biggest problems. It’s because of how homogeneous people’s social circles have become, and also because humans naturally hold biases. But researchers have discovered that far from being an immutable trait, empathy can be developed. There are steps people can take to acknowledge their biases and to move beyond their own worldviews to try to understand those held by other people. Bonus: You’ll make new friends along the way.",
-        link: "https://www.nytimes.com/guides/year-of-living-better/how-to-be-more-empathetic"
+        link: "https://www.nytimes.com/guides/year-of-living-better/how-to-be-more-empathetic",
+        will_learn: []
     },
     {
         id: 8,
@@ -117,7 +124,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "Computer programming is the process of writing instructions that get executed by computers. The instructions, also known as code, are written in a programming language which the computer can understand and use to perform a task or solve a problem. Basic computer programming involves the analysis of a problem and development of a logical sequence of instructions to solve it. There can be numerous paths to a solution and the computer programmer seeks to design and code that which is most efficient. Among the programmer’s tasks are understanding requirements, determining the right programming language to use, designing or architecting the solution, coding, testing, debugging and writing documentation so that the solution can be easily understood by other programmers. Computer programming is at the heart of computer science. It is the implementation portion of software development, application development and software engineering efforts, transforming ideas and theories into actual, working solutions.",
-        link: "https://www.edx.org/learn/computer-programming"
+        link: "https://www.edx.org/learn/computer-programming",
+        will_learn: []
     },
     {
         id: 9,
@@ -132,7 +140,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "Collaboration means working together with people from across the business to achieve a shared goal. Although similar to teamwork, a collaborative partnership is not hierarchical – everyone has equal status, no matter their seniority (though you may elect one person to organize the collaborative project). You can collaborate with members of your own team or from other departments, as well as contractors, clients, or even other organizations.",
-        link: "https://www.mindtools.com/pages/article/collaborate-successfully.htm"
+        link: "https://www.mindtools.com/pages/article/collaborate-successfully.htm",
+        will_learn: []
     },
     {
         id: 10,
@@ -147,7 +156,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "According to IDEO, one of the leaders in innovation and design, human-centered design is “a creative approach to problem solving” and a process that “starts with the people you’re designing for and ends with new solutions that are tailor-made to suit their needs.” By developing a deep understanding of the people you are designing a product, service, or solution for, you can create an innovative design that is right for them.",
-        link: "https://www.innovationtraining.org/top-human-centered-design-resources/"
+        link: "https://www.innovationtraining.org/top-human-centered-design-resources/",
+        will_learn: []
     },
     {
         id: 11,
@@ -162,7 +172,8 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "In today’s face-paced world it's difficult to maintain a sense of work/life balance. Work seems to penetrate into after hours and weekends resulting in feeling overwhelmed, stressed, and a general lack of enthusiasm for life. The American Institute of Stress claims that stress is American’s number one health problem, with work being the major culprit. Today, workers need clarity, skills, and education on how to attain and maintain a healthy work/life balance.",
-        link: "http://www.officiency.com/training_work_life_balance.html"
+        link: "http://www.officiency.com/training_work_life_balance.html",
+        will_learn: []
     },
     {
         id: 12,
@@ -177,6 +188,7 @@ export const courseData = [
         host: "AMP Creative",
         host_logo: "https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png",
         description: "Effective time management can help increase productivity and reduce stress. These tutorials explore time management tips that focus on mental and physical productivity, and tools like Microsoft Office and the Outlook calendar. Increase your time management skills to stay organized, keep a clear mind, and be more productive—in work and life.",
-        link: "https://www.lynda.com/Time-Management-training-tutorials/1369-0.html"
+        link: "https://www.lynda.com/Time-Management-training-tutorials/1369-0.html",
+        will_learn: []
     },
 ]

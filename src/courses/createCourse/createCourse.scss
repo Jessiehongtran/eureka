@@ -1,0 +1,40 @@
+.create-container {
+    display: flex;
+    justify-content: space-between;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
+
+    .content-list {
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid grey;
+        min-height: 100vh;
+        padding: 10px;
+
+        .content-shrink {
+            border: 1px solid grey;
+            width: 99%;
+            min-height: 100px
+        }
+    }
+
+    .content-editor {
+        width: 80%;
+        background-color: pink;
+    }
+
+    .module-options {
+        position: absolute;
+        background-color: white;
+        left: 22%;
+        display: flex;
+        flex-wrap: wrap;
+
+        .module {
+            border: 1px solid blue;
+            margin: 10px;
+        }
+    }
+}
