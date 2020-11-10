@@ -14,30 +14,36 @@ export default class Details extends React.Component {
     }
 
     render(){
+        const { openedCourse } = this.props;
+        console.log('props in details', this.props)
 
         return (
                 <div className="details">
                     <div className="top">
-                        <p className="date">Friday, November 6, 2020</p>
-                        <h2 className="title">Online: Book Reading Training</h2>
+                        <p className="date">
+                            {openedCourse.date}
+                        </p>
+                        <h2 className="title">
+                            {openedCourse.name}
+                        </h2>
                     </div>
                     <div className="main">
                         <div className="details">
-                            <h3 className="header">Details</h3>
+                            <h3 className="header">
+                                Details
+                            </h3>
                             <div className="text">
-                                Lorem ipsum dolor sit amet consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor amet fermentum. Nullam venenatis erat id vehicula ultrices sed ultricies condimentum. Magna sed etiam consequat, et lorem adipiscing sed nulla. Volutpat nisl et tempus et dolor libero, feugiat magna tempus, sed et lorem adipiscing.
-                                <br/>Vehicula ultrices dolor amet ultricies et condimentum. Magna sed etiam consequat, et lorem adipiscing sed dolor sit amet, consectetur amet do eiusmod tempor incididunt ipsum suspendisse ultrices gravida.
-                                <br/>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam sed facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet mauris. Ut magna finibus nisi nec lacinia ipsum maximus.
+                                {openedCourse.description}
                             </div>
                         </div>
                         <div className="time-venue">
                             <div className="top">
                                 <div className="host">
                                     <div className="logo">
-                                        <img src="https://res.cloudinary.com/dfulxq7so/image/upload/v1603918916/amp-creative-squarelogo-1531353023574_h4fl7l.png"/>
+                                        <img src={openedCourse.host_logo}/>
                                     </div>
                                     <div className="name">
-                                        AMP Creative
+                                        {openedCourse.host}
                                     </div>
                                 </div>
                             </div>
@@ -51,10 +57,10 @@ export default class Details extends React.Component {
                                     </div>
                                     <div className="info">
                                         <div className="date">
-                                            Friday, November 6, 2020
+                                            {openedCourse.date}
                                         </div>
                                         <div className="hour">
-                                            10:00PM to 11:00PM PST
+                                            {openedCourse.start_time} to {openedCourse.end_time}
                                         </div>
                                     </div>
                                 </div>
@@ -71,7 +77,12 @@ export default class Details extends React.Component {
                                         </div>
                                         <div className="link">
                                             {/* Link visible for attendees */}
-                                            <button className="launch-btn">Launch</button>
+                                            <a 
+                                                className="launch-btn"
+                                                href={openedCourse.link}
+                                            >
+                                                Launch
+                                            </a>
                                         </div>
                                     </div>
                                 </div>  

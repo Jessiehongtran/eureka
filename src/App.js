@@ -1,4 +1,5 @@
 import './App.css';
+import React, { useState } from 'react';
 import Nav from './nav/nav.jsx';
 import Courses from './courses/courses.jsx';
 import Details from './courses/courseDetails/details';
@@ -16,7 +17,9 @@ import Video from './modules/video/video';
 import { Route } from 'react-router-dom';
 
 
-function App() {
+const App = () => {
+  const [openedCourse, setOpenedCourse] = useState({})
+
   return (
     <div className="App">
       <Route 
@@ -26,7 +29,7 @@ function App() {
             return (
               <>
                 <Nav {...props}/>
-                <Courses {...props}/>
+                <Courses {...props} setOpenedCourse={setOpenedCourse}/>
               </>
             )
           }
@@ -39,7 +42,7 @@ function App() {
             return (
               <>
                 <NavInside/>
-                <Details {...props} />
+                <Details {...props} openedCourse={openedCourse} />
               </>
             )
           }

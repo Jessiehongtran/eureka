@@ -131,17 +131,18 @@
                         .link {
                             text-align: left;
                             color: grey;
+                            margin: 15px 0 6px 0;
 
                             .launch-btn {
                                 background-color: #DB3079;
                                 border-radius: 4px;
-                                padding: 10px 12px 10px 12px;
+                                padding: 5px 12px 5px 12px;
                                 border: none;
                                 color: white;
                                 width: 100%;
                                 font-size: 16px;
                                 font-family: 'Poppins', sans-serif;
-                                margin: 6px 0 6px 0;
+                                text-decoration: none;
                             }
                         }
                     }

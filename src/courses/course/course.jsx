@@ -16,13 +16,18 @@ export default class Course extends React.Component {
         this.setState({rating: nextValue});
       }
 
+    openCourse(course){
+        this.props.setOpenedCourse(course)
+        this.props.history.push('/details')
+    }
+
     render(){
 
-        const { course, history } = this.props;
+        const { course} = this.props;
         const { rating } = this.state;
 
         return (
-                <div className="course" onClick={() => history.push('/details')}>
+                <div className="course" onClick={() => this.openCourse(course)}>
                     <div className="course-wrapper">
                         <div className="image">
                                 <img src={course.banner} />
