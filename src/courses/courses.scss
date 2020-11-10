@@ -1,20 +1,30 @@
 .container {
-    display: flex;
+    padding: 0px 10% 0px 10%;
+    // background-color: red;
+    width: 100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
 
-    .courses {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        width: 100%;
-        padding: 60px 40px 40px 40px;
-        background-image: linear-gradient( #FDFBFB, #EBEDEE);
+    .courses-wrapper {
+        // background-color: blue;
         min-height: 100vh;
+        background-image: linear-gradient( #FDFBFB, #EBEDEE);
+        
+
+        .courses {
+            // background-color: brown;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            width: 100%;
 
 
-
-        @media (max-width: 1200px){
-            padding: 20px 0 0 0 ;
-            
+            @media (max-width: 1200px){
+                padding: 20px 0 0 0 ;
+                
+            }
         }
     }
 }

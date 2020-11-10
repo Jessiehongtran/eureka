@@ -17,12 +17,14 @@ export default class Nav extends React.Component {
         return (
             <div className="nav">
                 <div className="top">
-                    <h1 className="logo">Eureka!</h1>
-                    <Search />
-                    <FontAwesomeIcon
-                        icon = {faUserCircle}
-                        className="user"
-                    />
+                    <div className="top-wrapper">
+                        <h1 className="logo">Eureka!</h1>
+                        <Search />
+                        <FontAwesomeIcon
+                            icon = {faUserCircle}
+                            className="user"
+                        />
+                    </div>
                 </div>
                 <div className="below">
                     <Menu />

@@ -114,15 +114,17 @@ export default class Courses extends React.Component {
 
         return (
             <div className="container">
-                <div className="courses">
-                    {courses.length > 0
-                    ? courses.map(course => 
-                        <Course 
-                            key={course.id} 
-                            course={course} 
-                            history={this.props.history}
-                        />)
-                    : null} 
+                <div className="courses-wrapper">
+                    <div className="courses">
+                        {courses.length > 0
+                        ? courses.map(course => 
+                            <Course 
+                                key={course.id} 
+                                course={course} 
+                                history={this.props.history}
+                            />)
+                        : null} 
+                    </div>
                 </div>
             </div>
         )

@@ -14,6 +14,7 @@ export default class Video extends React.Component {
 
     handleChangeVideo(e){
         this.setState({video: e.target.files[0]})
+
     }
 
     saveHeader(e){
@@ -56,3 +57,4 @@ export default class Video extends React.Component {
         )
     }
 }
+
