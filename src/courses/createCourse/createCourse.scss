@@ -22,7 +22,7 @@
 
     .content-editor {
         width: 80%;
-        background-color: pink;
+        // background-color: pink;
     }
 
     .module-options {
@@ -32,7 +32,7 @@
         display: flex;
         flex-wrap: wrap;
 
-        .module {
+        .option {
             border: 1px solid blue;
             margin: 10px;
         }
