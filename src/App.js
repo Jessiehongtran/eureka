@@ -16,6 +16,7 @@ import Slider from './modules/slider/slider';
 import Quiz from './modules/quiz/quiz';
 import Video from './modules/video/video';
 import CreateCourse from './courses/createCourse/createCourse';
+import InputDragDrop1 from './modules/dragdrop1/forInput/dragdrop1.input';
 
 
 const App = () => {
@@ -80,6 +81,18 @@ const App = () => {
             return (
               <>
                 <DragDrop1 {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/input/dragdrop/1"
+        render = {
+          props => {
+            return (
+              <>
+                <InputDragDrop1 {...props} />
               </>
             )
           }

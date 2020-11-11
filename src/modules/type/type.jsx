@@ -9,12 +9,14 @@ export default class Type extends React.Component {
             text: "",
             total_cha: 160,
             current_font: 14,
-            reduced_count: 1
-
+            reduced_count: 1,
+            question: ""
         }
 
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleChangeQuestion = this.handleChangeQuestion.bind(this)
+        this.handleBlurQuestion = this.handleBlurQuestion.bind(this)
     }
 
     handleChange(e){
@@ -27,6 +29,15 @@ export default class Type extends React.Component {
                 reduced_count: this.state.reduced_count + 1
             })
         }
+    }
+
+    handleChangeQuestion(e){
+        this.setState({question: e.target.value})
+    }
+
+    handleBlurQuestion(){
+        console.log(this.state.question)
+        //post question to backend
     }
 
     handleSubmit(e){
@@ -46,13 +57,27 @@ export default class Type extends React.Component {
                         </div>
                     </div>
                     <div className="input-site">
-                        <p className="ques">What's your voice as a leader?</p>
-                        <input 
-                            onChange={this.handleChange}
-                            type="text"
-                            value={this.state.text}
-                        />
-                        <button onClick={(e) => this.handleSubmit(e)}>Send</button>
+                        <div className="type-wrapper">
+                            <div className="ques">
+                                <input
+                                    placeholder="Type a question"
+                                    type="text"
+                                    className="ques-input"
+                                    value={this.state.question}
+                                    onChange={this.handleChangeQuestion}
+                                    onBlur={this.handleBlurQuestion}
+                                />
+                            </div>
+                            <div className="ans">
+                                <input 
+                                    onChange={this.handleChange}
+                                    type="text"
+                                    value={this.state.text}
+                                    className="ans-input"
+                                />
+                                <button onClick={(e) => this.handleSubmit(e)}>Send</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <p><Link to="/modules">Home</Link></p> 

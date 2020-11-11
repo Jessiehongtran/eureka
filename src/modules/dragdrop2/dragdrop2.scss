@@ -1,9 +1,14 @@
 .container {
     position: relative;
 
-    .ques {
+    .drag-drop-2-ques-input {
         font-size: 18px;
-        
+        border: none;
+        border-bottom: 1px solid silver;
+        margin-bottom: 10px;
+        min-width: 400px;
+        padding: 5px 5px 0 5px;
+        min-height: 40px;
     }
 
     .explain {

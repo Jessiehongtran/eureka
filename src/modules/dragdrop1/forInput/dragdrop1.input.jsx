@@ -1,8 +1,9 @@
 import React from 'react';
-import './dragdrop1.scss'
-import { Link } from 'react-router-dom'
+import '../dragdrop1.scss';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-export default class DragDrop1 extends React.Component {
+export default class InputDragDrop1 extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -10,7 +11,11 @@ export default class DragDrop1 extends React.Component {
             before_changes: [],
             change: "",
             countChange : 0,
-            
+            header: "",
+            questionID: 0,
+            category_1: "",
+            category_2: "",
+            category_3: ""
         }
 
         this.updateChange = this.updateChange.bind(this)
@@ -18,6 +23,14 @@ export default class DragDrop1 extends React.Component {
         this.onDragOver = this.onDragOver.bind(this)
         this.onDragStart = this.onDragStart.bind(this)
         this.onDrop = this.onDrop.bind(this)
+        this.handleChangeHeader = this.handleChangeHeader.bind(this)
+        this.handleBlurHeader = this.handleBlurHeader.bind(this)
+        this.handleChangeCategory1 = this.handleChangeCategory1.bind(this)
+        this.handleChangeCategory2 = this.handleChangeCategory2.bind(this)
+        this.handleBlurCategory3 = this.handleBlurCategory3.bind(this)
+        this.handleBlurCategory1 = this.handleBlurCategory1.bind(this)
+        this.handleBlurCategory2 = this.handleBlurCategory2.bind(this)
+        this.handleBlurCategory3 = this.handleBlurCategory3.bind(this)
     }
 
     updateChange(e){
@@ -92,7 +105,55 @@ export default class DragDrop1 extends React.Component {
         }
     }
 
+    handleChangeHeader(e){
+        console.log('change')
+        this.setState({header: e.target.value})
+    }
 
+    handleChangeCategory1(e){
+        this.setState({category_1: e.target.value})
+    }
+
+    handleChangeCategory2(e){
+        this.setState({category_2: e.target.value})
+    }
+
+    handleChangeCategory3(e){
+        this.setState({category_3: e.target.value})
+    }
+
+    handleBlurCategory1(){
+        console.log(this.state.category_1)
+    }
+
+    handleBlurCategory2(){
+        console.log(this.state.category_2)
+    }
+
+    handleBlurCategory3(){
+        console.log(this.state.category_3)
+    }
+
+    async handleBlurHeader(e){
+        //make a post request here
+        try {
+            const res= await axios.post('http://localhost:5004/questions', {
+                question_text: this.state.header
+            })
+            const question = await axios.get(`http://localhost:5004/questions/${res.data.id}`)
+            console.log('questionnnn', question.data)
+
+        } catch (err){
+            console.error(err)
+        } 
+    }
+
+
+
+    componentDidMount(){
+        const timeoutId = setTimeout(() => console.log(`I can see you're not typing. I can use "${this.state.header}" now!`), 1000);
+        return () => clearTimeout(timeoutId);
+    }
 
     render(){
 
@@ -120,11 +181,20 @@ export default class DragDrop1 extends React.Component {
         return (
             <div className="container">
                 <div className="user-input">
-                    <p className="ques">List all the changes you are navigating to then drag it to different categories</p>
+                    <input
+                        type="text"
+                        placeholder="Type a header..." 
+                        className="header"
+                        value={this.state.header}
+                        onChange={this.handleChangeHeader}
+                        onBlur={this.handleBlurHeader}
+                        onKeyPress={this.handleKeyPress}
+                    />
                     <div className="ans">
                         <input
                             type="text" 
                             onChange={this.updateChange}
+                            
                         />
                         <button onClick={this.addChange}>Add</button>
                     </div>
@@ -147,7 +217,14 @@ export default class DragDrop1 extends React.Component {
                         onDragOver={(e) => this.onDragOver(e)}
                         onDrop={(e) => this.onDrop(e, "bias")}
                     >
-                        <h3 className="title">Bias</h3>
+                        <input
+                            type="text"
+                            className="category" 
+                            placeholder="Category 1"
+                            value={this.state.category_1}
+                            onChange={this.handleChangeCategory1}
+                            onBlur={this.handleBlurCategory1}
+                        />
                         {new_changes.bias}
                     </div>
                     <div 
@@ -155,7 +232,14 @@ export default class DragDrop1 extends React.Component {
                         onDragOver={(e) => this.onDragOver(e)}
                         onDrop={(e) => this.onDrop(e, "non_bias")}
                     >
-                        <h3 className="title">Non-bias</h3>
+                        <input
+                            type="text"
+                            className="category" 
+                            placeholder="Category 2"
+                            value={this.state.category_2}
+                            onChange={this.handleChangeCategory2}
+                            onBlur={this.handleBlurCategory2}
+                        />
                         {new_changes.non_bias}
                     </div>
                     <div 
@@ -163,7 +247,14 @@ export default class DragDrop1 extends React.Component {
                         onDragOver={(e) => this.onDragOver(e)}
                         onDrop={(e) => this.onDrop(e, "not_sure")}
                     >
-                        <h3 className="title">Not sure</h3>
+                        <input
+                            type="text"
+                            className="category"
+                            placeholder="Category 3"  
+                            value={this.state.category_3}
+                            onChange={this.handleChangeCategory3}
+                            onBlur={this.handleBlurCategory3}
+                        />
                         {new_changes.not_sure}
                     </div>
                 </div>
