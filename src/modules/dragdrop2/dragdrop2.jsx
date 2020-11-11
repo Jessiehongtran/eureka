@@ -138,7 +138,6 @@ export default class DragDrop2 extends React.Component {
                     
                 </div>
                 <p className="limit">Least likely</p>
-                <p><Link to="/modules">Home</Link></p>
             </div>
         )
     }

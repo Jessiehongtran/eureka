@@ -80,7 +80,6 @@ export default class Type extends React.Component {
                         </div>
                     </div>
                 </div>
-                <p><Link to="/modules">Home</Link></p> 
             </>
         )
     }

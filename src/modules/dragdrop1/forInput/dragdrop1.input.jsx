@@ -258,7 +258,6 @@ export default class InputDragDrop1 extends React.Component {
                         {new_changes.not_sure}
                     </div>
                 </div>
-                <p><Link to="/modules">Home</Link></p>
             </div>
         )
     }

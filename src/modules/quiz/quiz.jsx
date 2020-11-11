@@ -261,7 +261,6 @@ export default class Quiz extends React.Component {
                     </div>
                     <button className="create-btn">Create</button>
                 </div>
-                <p><Link to="/modules">Home</Link></p>
             </div>
         )
     }

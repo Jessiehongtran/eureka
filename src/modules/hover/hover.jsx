@@ -22,7 +22,6 @@ export default class Hover extends React.Component {
                     Hover from any side  
                     </div>
                 </div>
-                <p><Link to="/modules">Home</Link></p>
             </div>
         )
     }

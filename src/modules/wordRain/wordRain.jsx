@@ -58,7 +58,6 @@ export default class WordRain extends React.Component {
                     ? <button onClick={() => this.raining()}>Get a nutshell</button>
                     : <p className="text">{this.state.text}</p>}
                 </div>
-                <p className="home"><Link to="/modules">Home</Link></p> 
             </>
         )
     }
