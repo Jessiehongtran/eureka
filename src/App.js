@@ -17,6 +17,7 @@ import Quiz from './modules/quiz/quiz';
 import Video from './modules/video/video';
 import CreateCourse from './courses/createCourse/createCourse';
 import InputDragDrop1 from './modules/dragdrop1/forInput/dragdrop1.input';
+import CourseMedium from './courses/createCourse/medium/course.medium';
 
 
 const App = () => {
@@ -50,13 +51,25 @@ const App = () => {
           }
         }
       />
-       <Route 
-        exact path="/create"
+      <Route 
+        exact path="/course/:courseID"
         render = {
           props => {
             return (
               <>
                 <CreateCourse {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/medium"
+        render = {
+          props => {
+            return (
+              <>
+                <CourseMedium {...props} />
               </>
             )
           }

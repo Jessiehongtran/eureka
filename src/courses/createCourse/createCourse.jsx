@@ -7,6 +7,8 @@ import Type from '../../modules/type/type';
 import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
+import axios from 'axios';
+import { API_URL } from '../../apiConfig';
 
 export default class CreateCourse extends React.Component {
     constructor(props){
@@ -22,7 +24,9 @@ export default class CreateCourse extends React.Component {
             showWordRain: false,
             clickedX: 0,
             clickedY: 0,
-            content_boxes: [1]
+            content_boxes: [1],
+            courseID: this.props.match.params.courseID,
+            total_modules: 0,
 
         }
         this.toggleDisplayModules = this.toggleDisplayModules.bind(this)
@@ -33,6 +37,7 @@ export default class CreateCourse extends React.Component {
         this.showType = this.showType.bind(this)
         this.showVideo = this.showVideo.bind(this)
         this.showWordRain = this.showWordRain.bind(this)
+
     }
 
     toggleDisplayModules(e){
@@ -44,6 +49,20 @@ export default class CreateCourse extends React.Component {
         })
     }
 
+    async createSession(moduleID){
+        const session = {
+            courseID: this.state.courseID,
+            moduleID: moduleID,
+            order_number: this.state.total_modules + 1
+        }
+        try {
+            const res = await axios.post(`${API_URL}/session`, session)
+            console.log('res in creating session', res.data)
+        } catch (err){
+            console.error(err)
+        }
+    }
+
     showDragDrop1(){
         this.setState({showDragDrop1: true})
     }
@@ -53,6 +72,7 @@ export default class CreateCourse extends React.Component {
     }
 
     showQuiz(){
+        this.createSession(3)
         this.setState({showQuiz: true})
     }
 
@@ -82,7 +102,9 @@ export default class CreateCourse extends React.Component {
     }
 
     render(){
-        console.log('showDragDrop', this.state.showDragDrop)
+        console.log('createCourse component')
+
+        console.log('courseID', this.props.match.params.courseID)
 
         return (
             <div className="create-container">

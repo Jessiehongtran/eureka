@@ -4,7 +4,7 @@ import Menu from '../menu/menu.jsx';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import './nav.scss'
+import './nav.scss';
 
 export default class Nav extends React.Component {
     constructor(props){
@@ -12,6 +12,7 @@ export default class Nav extends React.Component {
         this.state = {
 
         }
+        
     }
 
     render(){
@@ -22,7 +23,7 @@ export default class Nav extends React.Component {
                         <h1 className="logo">Eureka!</h1>
                         <Search />
                         <Link 
-                            to="/create"
+                            to="/medium"
                             className="nav-create"
                         >Create page</Link>
                         <FontAwesomeIcon
