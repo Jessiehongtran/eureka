@@ -7,6 +7,7 @@ import Type from '../../modules/type/type';
 import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
+import Editor from '../createCourse/editor/editor';
 import axios from 'axios';
 import { API_URL } from '../../apiConfig';
 
@@ -27,7 +28,8 @@ export default class CreateCourse extends React.Component {
             content_boxes: [1],
             courseID: this.props.match.params.courseID,
             total_modules: 0,
-
+            curSessionID: 0,
+            course_content: []
         }
         this.toggleDisplayModules = this.toggleDisplayModules.bind(this)
         this.showDragDrop1 = this.showDragDrop1.bind(this)
@@ -49,6 +51,16 @@ export default class CreateCourse extends React.Component {
         })
     }
 
+    async componentDidMount(){
+        try {
+            const res = await axios.get(`${API_URL}/course/content/${this.state.courseID}`)
+            console.log('course content', res.data)
+            this.setState({course_content: res.data})
+        } catch (err){
+            console.error(err)
+        }
+    }
+
     async createSession(moduleID){
         const session = {
             courseID: this.state.courseID,
@@ -57,7 +69,8 @@ export default class CreateCourse extends React.Component {
         }
         try {
             const res = await axios.post(`${API_URL}/session`, session)
-            console.log('res in creating session', res.data)
+            const sessionID = res.data.id
+            this.setState({curSessionID: sessionID})
         } catch (err){
             console.error(err)
         }
@@ -101,8 +114,16 @@ export default class CreateCourse extends React.Component {
         })
     }
 
+    getContentByModule(moduleId){
+        const { course_content } = this.state
+        for (let i = 0; i < course_content.length; i++){
+            if (moduleId === course_content[i].moduleID){
+                return course_content[i] //but what if there are more than one for a module?
+            }
+        }
+    }
+
     render(){
-        console.log('createCourse component')
 
         console.log('courseID', this.props.match.params.courseID)
 
@@ -121,11 +142,11 @@ export default class CreateCourse extends React.Component {
                     >Add content</button>
                 </div>
                 <div className="content-editor">
-                    {this.state.showDragDrop1
+                    {/* {this.state.showDragDrop1
                     ? <DragDrop1 />
                     : null}
                     {this.state.showQuiz
-                    ? <Quiz />
+                    ? <Quiz curSessionID={this.state.curSessionID}/>
                     : null}
                     {this.state.showDragDrop2
                     ? <DragDrop2 />
@@ -141,7 +162,8 @@ export default class CreateCourse extends React.Component {
                     : null}
                     {this.state.showWordRain
                     ? <WordRain />
-                    : null}
+                    : null} */}
+                    <Editor component={<DragDrop1 />}/>
                 </div>
                 {this.state.showModules
                 ? <div className="module-options" style={{top: this.state.clickedY - 40 + 'px'}}>

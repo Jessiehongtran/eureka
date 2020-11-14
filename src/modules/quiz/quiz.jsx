@@ -23,14 +23,16 @@ export default class Quiz extends React.Component {
         this.postAnswer = this.postAnswer.bind(this)
         this.handleChangeImage = this.handleChangeImage.bind(this)
         this.toggleUploadImage = this.toggleUploadImage.bind(this)
+        this.postQuestion = this.postQuestion.bind(this)
     }
 
     async postQuestion(question){
         try {
-            const res= await axios.post('http://localhost:5004/questions', {
-                question_text: question
+            const res= await axios.post('http://localhost:5001/question', {
+                question_text: question,
+                sessionID: this.props.curSessionID
             })
-            console.log(res)
+            console.log('res in creating question', res)
             this.setState({questionID: res.data.id})
 
         } catch (err){
@@ -40,7 +42,7 @@ export default class Quiz extends React.Component {
 
     async updateQuestion(questionID, change){
         try {
-            const res= await axios.patch(`http://localhost:5004/questions/${questionID}`, change)
+            const res= await axios.patch(`http://localhost:5001/question/${questionID}`, change)
             console.log(res)
 
         } catch (err){
