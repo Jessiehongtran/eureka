@@ -15,31 +15,17 @@ export default class CreateCourse extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showModules: false,
-            showDragDrop1: false,
-            showDragDrop2: false,
-            showSlider: false,
-            showQuiz: false,
-            showVideo: false,
-            showType: false,
-            showWordRain: false,
             clickedX: 0,
             clickedY: 0,
             content_boxes: [1],
             courseID: this.props.match.params.courseID,
             total_modules: 0,
             curSessionID: 0,
-            course_content: []
+            course_content: [],
+            componentToPass: <></>
         }
         this.toggleDisplayModules = this.toggleDisplayModules.bind(this)
-        this.showDragDrop1 = this.showDragDrop1.bind(this)
-        this.addContentBox = this.addContentBox.bind(this)
-        this.showDragDrop2 = this.showDragDrop2.bind(this)
-        this.showSlider = this.showSlider.bind(this)
-        this.showType = this.showType.bind(this)
-        this.showVideo = this.showVideo.bind(this)
-        this.showWordRain = this.showWordRain.bind(this)
-
+        this.displayComponent = this.displayComponent.bind(this)
     }
 
     toggleDisplayModules(e){
@@ -76,35 +62,6 @@ export default class CreateCourse extends React.Component {
         }
     }
 
-    showDragDrop1(){
-        this.setState({showDragDrop1: true})
-    }
-
-    showDragDrop2(){
-        this.setState({showDragDrop2: true})
-    }
-
-    showQuiz(){
-        this.createSession(3)
-        this.setState({showQuiz: true})
-    }
-
-    showSlider(){
-        this.setState({showSlider: true})
-    }
-
-    showType(){
-        this.setState({showType: true})
-    }
-
-    showVideo(){
-        this.setState({showVideo: true})
-    }
-
-    showWordRain(){
-        this.setState({showWordRain: true})
-    }
-
     addContentBox(){
         this.setState({
             content_boxes: [
@@ -121,6 +78,10 @@ export default class CreateCourse extends React.Component {
                 return course_content[i] //but what if there are more than one for a module?
             }
         }
+    }
+
+    displayComponent(component){
+        this.setState({componentToPass: component})
     }
 
     render(){
@@ -142,62 +103,41 @@ export default class CreateCourse extends React.Component {
                     >Add content</button>
                 </div>
                 <div className="content-editor">
-                    {/* {this.state.showDragDrop1
-                    ? <DragDrop1 />
-                    : null}
-                    {this.state.showQuiz
-                    ? <Quiz curSessionID={this.state.curSessionID}/>
-                    : null}
-                    {this.state.showDragDrop2
-                    ? <DragDrop2 />
-                    : null}
-                    {this.state.showType
-                    ? <Type />
-                    : null}
-                    {this.state.showVideo
-                    ? <Video />
-                    : null}
-                    {this.state.showSlider
-                    ? <Slider />
-                    : null}
-                    {this.state.showWordRain
-                    ? <WordRain />
-                    : null} */}
-                    <Editor component={<DragDrop1 />}/>
+                    <Editor component={this.state.componentToPass}/>
                 </div>
                 {this.state.showModules
                 ? <div className="module-options" style={{top: this.state.clickedY - 40 + 'px'}}>
-                    <div className="option" onClick={() => this.showDragDrop1()}>
+                    <div className="option" onClick={() => this.displayComponent(<DragDrop1 />)}>
                         <p className="module-name">
                             Drag and drop 1
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.showDragDrop2()}>
+                    <div className="option" onClick={() => this.displayComponent(<DragDrop2 />)}>
                         <p className="module-name">
                             Drag and drop 2
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.showQuiz()}>
+                    <div className="option" onClick={() => this.displayComponent(<Quiz />)}>
                         <p className="module-name">
                             Quiz
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.showSlider()}>
+                    <div className="option" onClick={() => this.displayComponent(<Slider />)}>
                         <p className="module-name">
                             Slider
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.showType()}>
+                    <div className="option" onClick={() => this.displayComponent(<Type />)}>
                         <p className="module-name">
                             Type
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.showVideo()}>
+                    <div className="option" onClick={() => this.displayComponent(<Video />)}>
                         <p className="module-name">
                             Video
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.showWordRain()}>
+                    <div className="option" onClick={() => this.displayComponent(<WordRain />)}>
                         <p className="module-name">
                             Word Rain
                         </p>

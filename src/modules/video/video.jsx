@@ -49,8 +49,8 @@ export default class Video extends React.Component {
                         width="760" 
                         height="515" 
                         src= {this.state.video !== null? URL.createObjectURL(this.state.video) : ""} 
-                        frameborder="0" 
-                        allowfullscreen scrolling="no"></iframe>
+                        frameBorder="0" 
+                        allowFullScreen scrolling="no"></iframe>
                     
                 </div>
             </div>
