@@ -17,23 +17,25 @@ export default class CreateCourse extends React.Component {
         this.state = {
             clickedX: 0,
             clickedY: 0,
-            content_boxes: [1],
+            content_boxes: [],
             courseID: this.props.match.params.courseID,
             total_modules: 0,
             curSessionID: 0,
             course_content: [],
-            componentToPass: <></>
+            componentToPass: <></>,
+            currentContentBox: 0
         }
         this.toggleDisplayModules = this.toggleDisplayModules.bind(this)
         this.displayComponent = this.displayComponent.bind(this)
     }
 
-    toggleDisplayModules(e){
+    toggleDisplayModules(e, i){
         console.log(e.clientX, e.clientY)
         this.setState({
             clickedX: e.clientX,
             clickedY: e.clientY,
-            showModules: !this.state.showModules
+            showModules: !this.state.showModules,
+            currentContentBox: i
         })
     }
 
@@ -66,7 +68,7 @@ export default class CreateCourse extends React.Component {
         this.setState({
             content_boxes: [
                 ...this.state.content_boxes,
-                1
+                {module: ""}
             ]
         })
     }
@@ -80,8 +82,13 @@ export default class CreateCourse extends React.Component {
         }
     }
 
-    displayComponent(component){
-        this.setState({componentToPass: component})
+    displayComponent(component, module){
+        const { content_boxes, currentContentBox } = this.state;
+        content_boxes[currentContentBox].module = module
+        this.setState({
+            componentToPass: component,
+            content_boxes: content_boxes
+        })
     }
 
     render(){
@@ -91,10 +98,11 @@ export default class CreateCourse extends React.Component {
         return (
             <div className="create-container">
                 <div className="content-list">
-                    {this.state.content_boxes.map(content => <div 
+                    {this.state.content_boxes.map((content,i) => <div 
                                                                 className="content-shrink"
-                                                                onClick={(e) => this.toggleDisplayModules(e)}
+                                                                onClick={(e) => this.toggleDisplayModules(e, i)}
                                                              >   
+                                                             {content.module.length > 0 ? content.module : null}
                                                              </div>
                     )}
                     <button 
@@ -107,37 +115,37 @@ export default class CreateCourse extends React.Component {
                 </div>
                 {this.state.showModules
                 ? <div className="module-options" style={{top: this.state.clickedY - 40 + 'px'}}>
-                    <div className="option" onClick={() => this.displayComponent(<DragDrop1 />)}>
+                    <div className="option" onClick={() => this.displayComponent(<DragDrop1 />, "Drag and drop 1")}>
                         <p className="module-name">
                             Drag and drop 1
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.displayComponent(<DragDrop2 />)}>
+                    <div className="option" onClick={() => this.displayComponent(<DragDrop2 />, "Drag and drop 2")}>
                         <p className="module-name">
                             Drag and drop 2
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.displayComponent(<Quiz />)}>
+                    <div className="option" onClick={() => this.displayComponent(<Quiz />, "Quiz")}>
                         <p className="module-name">
                             Quiz
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.displayComponent(<Slider />)}>
+                    <div className="option" onClick={() => this.displayComponent(<Slider />, "Slider")}>
                         <p className="module-name">
                             Slider
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.displayComponent(<Type />)}>
+                    <div className="option" onClick={() => this.displayComponent(<Type />, "Type")}>
                         <p className="module-name">
                             Type
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.displayComponent(<Video />)}>
+                    <div className="option" onClick={() => this.displayComponent(<Video />, "Video")}>
                         <p className="module-name">
                             Video
                         </p>
                     </div>
-                    <div className="option" onClick={() => this.displayComponent(<WordRain />)}>
+                    <div className="option" onClick={() => this.displayComponent(<WordRain />, "Word Rain")}>
                         <p className="module-name">
                             Word Rain
                         </p>
