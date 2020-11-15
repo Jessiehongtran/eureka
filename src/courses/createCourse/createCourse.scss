@@ -13,7 +13,7 @@
         min-height: 100vh;
         padding: 10px;
 
-        .content-shrink {
+        .content-shrink, .each-session {
             border: 1px solid grey;
             width: 99%;
             min-height: 100px;
@@ -30,7 +30,7 @@
         // background-color: pink;
     }
 
-    .module-options {
+    .module-options, .module-menu {
         position: absolute;
         background-color: #EDEDED;
         left: 22%;

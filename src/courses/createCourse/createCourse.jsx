@@ -30,7 +30,6 @@ export default class CreateCourse extends React.Component {
     }
 
     toggleDisplayModules(e, i){
-        console.log(e.clientX, e.clientY)
         this.setState({
             clickedX: e.clientX,
             clickedY: e.clientY,
@@ -83,6 +82,8 @@ export default class CreateCourse extends React.Component {
     }
 
     displayComponent(component, module){
+        //create session with module here
+        
         const { content_boxes, currentContentBox } = this.state;
         content_boxes[currentContentBox].module = module
         this.setState({
