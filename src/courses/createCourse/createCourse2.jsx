@@ -51,17 +51,24 @@ export default class CreateCourse extends React.Component {
         try {
             const res = await axios.post(`${API_URL}/session`, session)
             console.log('respond from posting a session', res.data)
+            const newSessionID = res.data.id;
 
             //rerender get session 
             this.getSessions()
+
+            //display session
+            this.displaySession(newSessionID)
         } catch (err){
             console.error(err)
         }
+
+        
     }
 
     async getSessions(){
+        const courseID = this.props.match.params.courseID
         try {
-            const res = await axios.get(`${API_URL}/session`)
+            const res = await axios.get(`${API_URL}/session/course/${courseID}`)
             console.log('sessions', res.data)
             this.setState({sessions: res.data})
         } catch (err){
