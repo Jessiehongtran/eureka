@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { API_URL } from '../../../apiConfig';
+import './course.medium.scss';
 
 export default class courseMedium extends React.Component {
     constructor(props){
@@ -36,22 +37,26 @@ export default class courseMedium extends React.Component {
     render(){
         console.log('medium component')
         return (
-            <div>
-                <input
-                    type="text"
-                    placeholder="Course name"
-                    name="name"
-                    onChange={this.handleChange}
-                />
-                <input
-                    type="text"
-                    placeholder="Course description"
-                    name="decription"
-                    onChange={this.handleChange}
-                />
-                <button 
-                    onClick={() => this.createPage()}
-                >Next</button>
+            <div className="medium">
+                <div className="wrapper">
+                    <input
+                        type="text"
+                        placeholder="Course name"
+                        name="name"
+                        className="course-name"
+                        onChange={this.handleChange}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Course description"
+                        name="decription"
+                        className="course-description"
+                        onChange={this.handleChange}
+                    />
+                    <button 
+                        onClick={() => this.createPage()}
+                    >Next</button>
+                </div>
             </div>
         )
     }

@@ -21,7 +21,8 @@ export default class CreateCourse extends React.Component {
             activeSessionInd: 0,
             clickedModuleID: 0,
             componentToDisplay: <></>,
-            clickedY: 0
+            clickedY: 0,
+            selectedSession: {}
         }
 
         this.getSessions = this.getSessions.bind(this);
@@ -30,7 +31,7 @@ export default class CreateCourse extends React.Component {
         this.displayModuleMenu = this.displayModuleMenu.bind(this);
         this.updateClickedModule = this.updateClickedModule.bind(this);
         this.displaySession = this.displaySession.bind(this);
-        
+        this.getASpecificSession = this.getASpecificSession.bind(this);
     }
 
     componentDidMount(){
@@ -51,26 +52,37 @@ export default class CreateCourse extends React.Component {
         try {
             const res = await axios.post(`${API_URL}/session`, session)
             console.log('respond from posting a session', res.data)
-            const newSessionID = res.data.id;
-
-            //rerender get session 
-            this.getSessions()
+            const newSessionID = parseInt(res.data.id);
+            console.log('newSessionID', newSessionID)
 
             //display session
             this.displaySession(newSessionID)
         } catch (err){
             console.error(err)
         }
+    }
 
-        
+    async getASpecificSession(sessionID){
+        let session = null
+        try {
+            const res = await axios.get(`${API_URL}/session/${parseInt(sessionID)}`)
+            session = res.data
+        } catch (err) {
+            console.error(err)
+        }
+        return session
     }
 
     async getSessions(){
         const courseID = this.props.match.params.courseID
         try {
             const res = await axios.get(`${API_URL}/session/course/${courseID}`)
-            console.log('sessions', res.data)
             this.setState({sessions: res.data})
+            if (res.data.length > 0){
+                const firstSession = res.data[0]
+                const firstSessionID = firstSession.sessionID
+                this.displaySession(firstSessionID)
+            }
         } catch (err){
             console.error(err)
         }
@@ -79,7 +91,6 @@ export default class CreateCourse extends React.Component {
     async getModules(){
         try {
             const res = await axios.get(`${API_URL}/module`)
-            console.log('modules', res.data)
             this.setState({modules: res.data})
         } catch (err){
             console.error(err)
@@ -106,12 +117,11 @@ export default class CreateCourse extends React.Component {
         this.addSession(moduleID)
     }
 
-    displaySession(sessionID){
-        console.log('displaySession')
+    async displaySession(sessionID){
+
         //get the session and the module
-        const { sessions } = this.state;
-        const selectedSession = sessions.filter(session => session.sessionID === sessionID)[0];
-        console.log('selected session', selectedSession)
+        const selectedSession = await this.getASpecificSession(sessionID)
+
 
         //get the component of the module and update the state componentToDisplay
         const selectedModuleID = selectedSession.moduleID
@@ -138,27 +148,20 @@ export default class CreateCourse extends React.Component {
         } 
     }
 
-    // getSpecificModule(moduleID){
-    //     const { modules } = this.state;
-    //     const thisModule = modules.filter(module => module.id === moduleID)
-    //     return thisModule
-    // }
-
     render(){
         const { sessions, showModuleMenu, modules, componentToDisplay } = this.state;
-        console.log('componentToDisplay', componentToDisplay)
 
         return (
             <div className="create-container">
                 <div className="content-list">
                     {sessions.length > 0
                     ? sessions.map((session) => <div 
-                                                                key={session.sessionID}
-                                                                className="each-session"
-                                                                onClick={() => this.displaySession(session.sessionID)}
-                                                            >   
-                                                                {session.module_name}
-                                                            </div>)
+                                                    key={session.sessionID}
+                                                    className="each-session"
+                                                    onClick={() => this.displaySession(session.sessionID)}
+                                                >   
+                                                    {session.module_name}
+                                                </div>)
                     : null}
                     <button 
                             className="add-btn"

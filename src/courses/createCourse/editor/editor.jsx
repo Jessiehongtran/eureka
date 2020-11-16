@@ -9,7 +9,7 @@ export default class Editor extends React.Component {
     }
 
     render(){
-        console.log('props in Editor', this.props)
+
         return (
             <>
                 {this.props.component}
