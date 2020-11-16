@@ -13,9 +13,8 @@ export default class InputDragDrop1 extends React.Component {
             countChange : 0,
             header: "",
             questionID: 0,
-            category_1: "",
-            category_2: "",
-            category_3: ""
+            curCategoryName: "",
+            category_list:[{id: 1, category_name: "category name"}]
         }
 
         this.updateChange = this.updateChange.bind(this)
@@ -25,12 +24,8 @@ export default class InputDragDrop1 extends React.Component {
         this.onDrop = this.onDrop.bind(this)
         this.handleChangeHeader = this.handleChangeHeader.bind(this)
         this.handleBlurHeader = this.handleBlurHeader.bind(this)
-        this.handleChangeCategory1 = this.handleChangeCategory1.bind(this)
-        this.handleChangeCategory2 = this.handleChangeCategory2.bind(this)
-        this.handleBlurCategory3 = this.handleBlurCategory3.bind(this)
-        this.handleBlurCategory1 = this.handleBlurCategory1.bind(this)
-        this.handleBlurCategory2 = this.handleBlurCategory2.bind(this)
-        this.handleBlurCategory3 = this.handleBlurCategory3.bind(this)
+        this.handleChangeCategory = this.handleChangeCategory.bind(this)
+        this.handleBlurCategory = this.handleBlurCategory.bind(this)
     }
 
     updateChange(e){
@@ -59,13 +54,13 @@ export default class InputDragDrop1 extends React.Component {
     }
 
     onDragStart(e, name){
-        console.log('start')
+        console.log('start', name)
         e.dataTransfer.setData('name', name)
         
-    }
+    } 
 
     onDrop = (e, cat) => {
-        console.log('drop')
+        console.log('drop', cat)
         let name = e.dataTransfer.getData('name');
 
         let new_after_change = this.state.before_changes.filter((change) => {
@@ -74,7 +69,7 @@ export default class InputDragDrop1 extends React.Component {
             }
             return change
         })
-
+        console.log('new_after_change', new_after_change)
         console.log('after_changes', this.state.after_changes)
 
         if (new_after_change.length === 0){
@@ -110,50 +105,32 @@ export default class InputDragDrop1 extends React.Component {
         this.setState({header: e.target.value})
     }
 
-    handleChangeCategory1(e){
-        this.setState({category_1: e.target.value})
+    
+
+    postHeader(header){
+        //post header as text
     }
 
-    handleChangeCategory2(e){
-        this.setState({category_2: e.target.value})
-    }
-
-    handleChangeCategory3(e){
-        this.setState({category_3: e.target.value})
-    }
-
-    handleBlurCategory1(){
-        console.log(this.state.category_1)
-    }
-
-    handleBlurCategory2(){
-        console.log(this.state.category_2)
-    }
-
-    handleBlurCategory3(){
-        console.log(this.state.category_3)
+    postCategory(category){
+        //post category
     }
 
     async handleBlurHeader(e){
-        //make a post request here
-        try {
-            const res= await axios.post('http://localhost:5004/questions', {
-                question_text: this.state.header
-            })
-            const question = await axios.get(`http://localhost:5004/questions/${res.data.id}`)
-            console.log('questionnnn', question.data)
-
-        } catch (err){
-            console.error(err)
-        } 
+        //post header
+        this.postHeader(this.state.header)
     }
 
-
-
-    componentDidMount(){
-        const timeoutId = setTimeout(() => console.log(`I can see you're not typing. I can use "${this.state.header}" now!`), 1000);
-        return () => clearTimeout(timeoutId);
+    handleChangeCategory(e){
+        this.setState({curCategoryName: e.target.value})
     }
+
+    handleBlurCategory(e, categoryInd){
+        const { category_list } = this.state;
+        let categoryToUpdate = category_list.filter(cate => cate.id === categoryInd)[0];
+        categoryToUpdate.category_name = e.target.value;
+        this.setState({category_list: category_list})
+    }
+
 
     render(){
 
@@ -177,6 +154,9 @@ export default class InputDragDrop1 extends React.Component {
                     )
                 }
             }
+
+        const { category_list } = this.state;
+        console.log('category_list', category_list)
 
         return (
             <div className="container">
@@ -212,7 +192,27 @@ export default class InputDragDrop1 extends React.Component {
                 }
                 </div>
                 <div className="classify">
-                    <div 
+                    {category_list.length > 0
+                    ? category_list.map(cate => 
+                        <div 
+                            className="session" 
+                            key={cate.id}
+                            onDragOver={(e) => this.onDragOver(e)}
+                            onDrop={(e) => this.onDrop(e, cate.category_name)}
+                        >
+                            <input
+                                type="text"
+                                className="category" 
+                                placeholder="Category name"
+                                onBlur={e => this.handleBlurCategory(e, cate.id)}
+                            />
+                            {new_changes.bias}
+                        </div>
+                        )
+                    : null
+                    }
+
+                    {/* <div 
                         className="session" 
                         onDragOver={(e) => this.onDragOver(e)}
                         onDrop={(e) => this.onDrop(e, "bias")}
@@ -256,7 +256,7 @@ export default class InputDragDrop1 extends React.Component {
                             onBlur={this.handleBlurCategory3}
                         />
                         {new_changes.not_sure}
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )
