@@ -60,8 +60,8 @@ export default class InputDragDrop1 extends React.Component {
     } 
 
     onDrop = (e, cat) => {
-        console.log('drop', cat)
         let name = e.dataTransfer.getData('name');
+        console.log('drop', 'cat', cat, 'name', name)
 
         let new_after_change = this.state.before_changes.filter((change) => {
             if (change.name == name){
@@ -70,7 +70,7 @@ export default class InputDragDrop1 extends React.Component {
             return change
         })
         console.log('new_after_change', new_after_change)
-        console.log('after_changes', this.state.after_changes)
+        console.log('after_changes before', this.state.after_changes)
 
         if (new_after_change.length === 0){
             const after_changes = this.state.after_changes
@@ -98,6 +98,9 @@ export default class InputDragDrop1 extends React.Component {
             })
 
         }
+
+       
+
     }
 
     handleChangeHeader(e){
@@ -134,10 +137,12 @@ export default class InputDragDrop1 extends React.Component {
 
     render(){
 
-        var new_changes = {
-            bias: [],
-            non_bias: [],
-            not_sure: []
+        //now we don't know category name in advance, how can we classify
+        const { category_list } = this.state;
+        let new_changes = {}
+        console.log('after_changes after', this.state.after_changes)
+        for (let i = 0; i < category_list.length; i++){
+            new_changes[category_list[i].category_name] = []
         }
 
         for (let i = 0 ; i < this.state.after_changes.length; i++){
@@ -155,8 +160,8 @@ export default class InputDragDrop1 extends React.Component {
                 }
             }
 
-        const { category_list } = this.state;
         console.log('category_list', category_list)
+        console.log('new_changes', new_changes)
 
         return (
             <div className="container">
@@ -206,7 +211,7 @@ export default class InputDragDrop1 extends React.Component {
                                 placeholder="Category name"
                                 onBlur={e => this.handleBlurCategory(e, cate.id)}
                             />
-                            {new_changes.bias}
+                            {new_changes[cate.category_name]}
                         </div>
                         )
                     : null
