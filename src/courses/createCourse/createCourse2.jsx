@@ -126,25 +126,25 @@ export default class CreateCourse extends React.Component {
         //get the component of the module and update the state componentToDisplay
         const selectedModuleID = selectedSession.moduleID
         if (selectedModuleID === 1){
-            this.setState({ componentToDisplay: <DragDrop1 />})
+            this.setState({ componentToDisplay: <DragDrop1 sessionID={sessionID} />})
         } 
         else if (selectedModuleID === 2){
-            this.setState({ componentToDisplay: <DragDrop2 />})
+            this.setState({ componentToDisplay: <DragDrop2 sessionID={sessionID} />})
         } 
         else if (selectedModuleID === 3){
-            this.setState({ componentToDisplay: <Quiz />})
+            this.setState({ componentToDisplay: <Quiz sessionID={sessionID} />})
         } 
         else if (selectedModuleID === 4){
-            this.setState({ componentToDisplay: <Slider />})
+            this.setState({ componentToDisplay: <Slider sessionID={sessionID} />})
         } 
         else if (selectedModuleID === 5){
-            this.setState({ componentToDisplay: <Type />})
+            this.setState({ componentToDisplay: <Type sessionID={sessionID} />})
         } 
         else if (selectedModuleID === 6){
-            this.setState({ componentToDisplay: <Video />})
+            this.setState({ componentToDisplay: <Video sessionID={sessionID} />})
         } 
         else if (selectedModuleID === 7){
-            this.setState({ componentToDisplay: <WordRain />})
+            this.setState({ componentToDisplay: <WordRain sessionID={sessionID} />})
         } 
     }
 
