@@ -3,36 +3,61 @@ import './quiz.scss';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { API_URL } from '../../apiConfig';
 
 export default class Quiz extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             question: "",
-            answers: [],
-            questionID : 0,
-            answerIDs: [0,0,0,0],
+            choices: [
+                {
+                    id: 1,
+                    choice_text: "Answer 1",
+                    isCorrect: false
+                },
+                {
+                    id: 2,
+                    choice_text: "Answer 2",
+                    isCorrect: false
+                },
+                {
+                    id: 3,
+                    choice_text: "Answer 3",
+                    isCorrect: false
+                },
+                {
+                    id: 4,
+                    choice_text: "Answer 4",
+                    isCorrect: false
+                }
+            ],
             imgUrl: "",
             showUploadFunc: true
         }
         this.saveQuestion = this.saveQuestion.bind(this)
-        this.saveAnswer = this.saveAnswer.bind(this)
+        this.saveChoice = this.saveChoice.bind(this)
         this.updateCorrectAns = this.updateCorrectAns.bind(this)
         this.postQuestion = this.postQuestion.bind(this)
-        this.postAnswer = this.postAnswer.bind(this)
+        this.postChoice = this.postChoice.bind(this)
         this.handleChangeImage = this.handleChangeImage.bind(this)
         this.toggleUploadImage = this.toggleUploadImage.bind(this)
         this.postQuestion = this.postQuestion.bind(this)
+        this.handleChangeQuestion = this.handleChangeQuestion.bind(this)
+    }
+
+    componentDidMount(){
+        this.getQuestion(this.props.sessionID);
+        this.getChoices(this.props.sessionID)
     }
 
     async postQuestion(question){
         try {
-            const res= await axios.post('http://localhost:5001/question', {
+            const res= await axios.post(`${API_URL}/question`, {
                 question_text: question,
-                sessionID: this.props.curSessionID
+                sessionID: this.props.sessionID
             })
-            console.log('res in creating question', res)
             this.setState({questionID: res.data.id})
 
         } catch (err){
@@ -42,8 +67,7 @@ export default class Quiz extends React.Component {
 
     async updateQuestion(questionID, change){
         try {
-            const res= await axios.patch(`http://localhost:5001/question/${questionID}`, change)
-            console.log(res)
+            const res= await axios.patch(`${API_URL}/question/${questionID}`, change)
 
         } catch (err){
             console.error(err)
@@ -51,14 +75,14 @@ export default class Quiz extends React.Component {
     }
 
 
-    async postAnswer(answer, ind){
+    async postChoice(answer, ind){
         const { questionID, answerIDs } = this.state
         if (questionID !== 0){
             try {
-                const res= await axios.post(`http://localhost:5004/questions/${questionID}/answers`, {
-                    answer_text: answer,
-                    questionID: questionID,
-                    isAnswer: false
+                const res= await axios.post(`${API_URL}/choice`, {
+                    choice_text: answer,
+                    sessionID: this.props.sessionID,
+                    isCorrect: false
                     
                 })
                 answerIDs[parseInt(ind)] = res.data.id 
@@ -73,25 +97,48 @@ export default class Quiz extends React.Component {
 
     }
 
-    async updateAnswer(answerID, change){
+    async getQuestion(sessionID){
         try {
-            const res= await axios.patch(`http://localhost:5004/questions/answers/${answerID}`, change)
-            console.log(res)
-
+            const res = await axios.get(`${API_URL}/question/session/${sessionID}`)
+            this.setState({question: res.data})
         } catch (err){
             console.error(err)
         }
     }
 
+    async getChoices(sessionID){
+        try {
+            const res = await axios.get(`${API_URL}/choice/session/${sessionID}`)
+            this.setState({choices: res.data})
+        } catch (err){
+            console.error(err)
+        }
+    }
 
+    async updateChoice(answerID, change){
+        try {
+            const res = await axios.patch(`${API_URL}/choice/${answerID}`, change)
+        } catch (err){
+            console.error(err)
+        }
+    }
 
+    async findAChoice(choiceID){
+        let choice = null
+        try {
+            const res= await axios.get(`${API_URL}/choice/${choiceID}`)
+            choice = res.data
+        } catch (err){
+            console.error(err)
+        }
+        return choice
+    }
 
     saveQuestion(e){
-        // this.setState({question: e.target.value})
         //pushe to backend
-        const { questionID } = this.state
-        if (questionID !== 0){
-            this.updateQuestion(questionID, {question_text: e.target.value})
+        const { question } = this.state
+        if (question.id){
+            this.updateQuestion(question.id, {question_text: e.target.value})
         }
         else {
             this.postQuestion(e.target.value)
@@ -99,38 +146,13 @@ export default class Quiz extends React.Component {
         
     }
 
-    saveAnswer(e, ind){
-        // this.setState(
-        //     {
-        //         answers: [
-        //             ...this.state.answers,
-        //             {
-        //                 id: this.state.answers.length + 1,
-        //                 text: e.target.value,
-        //                 isCorrect: false
-        //             }
-        //         ],
 
-        //     }
-        // )
-
-        // if (ind == 0){
-        //     this.setState({answer1ID: this.state.answers.length + 1})
-        // }
-        // else if (ind == 1){
-        //     this.setState({answer2ID: this.state.answers.length + 1})
-        // }
-        // else if (ind == 2){
-        //     this.setState({answer3ID: this.state.answers.length + 1})
-        // }
-        // else if (ind == 3){
-        //     this.setState({answer4ID: this.state.answers.length + 1})
-        // }
-
+    async saveChoice(e, ind){
         //push to backend 
-        const { answerIDs } = this.state
-        if (answerIDs[parseInt(ind)] !== 0){
-            this.updateAnswer(answerIDs[parseInt(ind)], {answer_text: e.target.value})
+        //find the answer if it exists on backend first, if yes, update, else post
+        const choice = await this.findAChoice(ind)
+        if (choice !== undefined){
+            this.updateChoice(ind, {choice_text: e.target.value})
         }
         else {
             this.postAnswer(e.target.value, ind)
@@ -138,15 +160,18 @@ export default class Quiz extends React.Component {
 
     }
 
+
+
     toggleUploadImage(){
         this.setState({showUploadFunc : !this.state.showUploadFunc})
     }
 
-    updateCorrectAns(e){
-        const ansID = parseInt(e.target.value)
+    async updateCorrectAns(ansID){
         //update in backend this answer is correct
-        if (parseInt(ansID) !== 0 ){
-            this.updateAnswer(parseInt(ansID), {isAnswer: true})
+        //find if answer exists in backend first, if yes, update, else alert to create answer
+        const choice = await this.findAChoice(ansID)
+        if (choice !== undefined){
+            this.updateChoice(parseInt(ansID), {isCorrect: true})
         } else {
             alert("Please create an answer first")
         }
@@ -161,14 +186,29 @@ export default class Quiz extends React.Component {
             this.setState({imgUrl: reader.result})
         }
         this.toggleUploadImage()
+    }
 
+    handleChangeAnswer(e, ind){
+        //should be updating answers regardless
+        const { choices } = this.state;
+        const theChoice = choices.filter(choice => choice.id === ind)[0]
+        theChoice.choice_text = e.target.value;
+        this.setState({
+            choices: choices
+        })
+    }
 
+    handleChangeQuestion(e){
+        this.setState({
+            question: {
+                ...this.state.question,
+                question_text: e.target.value
+            }
+        })
     }
 
     render(){
-        const { question, answerIDs } = this.state
-        console.log('question', question)
-        console.log('url', this.state.imgUrl)
+        const { question, choices } = this.state;
 
         return (
             <div className="quiz">
@@ -177,6 +217,8 @@ export default class Quiz extends React.Component {
                         type="text"
                         className="ques-input"
                         placeholder="Click to type a question"
+                        value={question.question_text}
+                        onChange={this.handleChangeQuestion}
                         onBlur= {this.saveQuestion}
                         
                     />
@@ -203,65 +245,23 @@ export default class Quiz extends React.Component {
                     </div>
                     }
                     <div className="answers">
-                        <div className="each">
-                            <input
-                                type="text"
-                                className="ans-input"
-                                placeholder="Answer 1"
-                                onBlur= {e => this.saveAnswer(e,0)}
-                            />
-                            <input 
-                                type="radio"
-                                className="check-ans"
-                                value={answerIDs[0]}
-                                onChange={this.updateCorrectAns}
-                            />
-                        </div>
-                        <div className="each">
-                            <input
-                                type="text"
-                                className="ans-input"
-                                placeholder="Answer 2"
-                                onBlur= {e => this.saveAnswer(e,1)}
-                                
-                            />
-                            <input 
-                                type="radio"
-                                className="check-ans"
-                                value={answerIDs[1]}
-                                onChange={this.updateCorrectAns}
-                            />
-                        </div>
-                        <div className="each">
-                            <input
-                                type="text"
-                                className="ans-input"
-                                placeholder="Answer 3"
-                                onBlur= {e => this.saveAnswer(e,2)}
-                            />
-                            <input 
-                                type="radio"
-                                className="check-ans"
-                                value={answerIDs[2]}
-                                onChange={this.updateCorrectAns}
-                            />
-                        </div>
-                        <div className="each">
-                            <input
-                                type="text"
-                                className="ans-input"
-                                placeholder="Answer 4"
-                                onBlur= {e => this.saveAnswer(e,3)}
-                            />
-                             <input 
-                                type="radio"
-                                className="check-ans"
-                                value={answerIDs[3]}
-                                onChange={this.updateCorrectAns}
-                            />
-                        </div>
+                        {choices.map(choice => 
+                            <div className="each" key={choice.id}>
+                                <input
+                                    type="text"
+                                    className="ans-input"
+                                    value={choice.choice_text}
+                                    onChange={e=> this.handleChangeAnswer(e, choice.id)}
+                                    onBlur= {e => this.saveChoice(e, choice.id)}
+                                />
+                                <input 
+                                    type="radio"
+                                    className="check-ans"
+                                    onChange={() => this.updateCorrectAns(choice.id)}
+                                />
+                            </div>)}
+                        
                     </div>
-                    <button className="create-btn">Create</button>
                 </div>
             </div>
         )
