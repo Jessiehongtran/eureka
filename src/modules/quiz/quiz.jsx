@@ -33,7 +33,9 @@ export default class Quiz extends React.Component {
                     isCorrect: false
                 }
             ],
-            imgUrl: "",
+            image: {
+                image_url: ""
+            },
             showUploadFunc: true
         }
         this.saveQuestion = this.saveQuestion.bind(this)
@@ -42,7 +44,7 @@ export default class Quiz extends React.Component {
         this.postQuestion = this.postQuestion.bind(this)
         this.postChoice = this.postChoice.bind(this)
         this.handleChangeImage = this.handleChangeImage.bind(this)
-        this.toggleUploadImage = this.toggleUploadImage.bind(this)
+        this.removeImage = this.removeImage.bind(this)
         this.postQuestion = this.postQuestion.bind(this)
         this.handleChangeQuestion = this.handleChangeQuestion.bind(this)
     }
@@ -181,7 +183,7 @@ export default class Quiz extends React.Component {
             console.log('res in getting image', res.data)
             if (res.data.length > 0){
                 this.setState({
-                    imgUrl: res.data[0].image_url,
+                    image: res.data[0],
                     showUploadFunc: false
                 })
             }
@@ -190,8 +192,14 @@ export default class Quiz extends React.Component {
         }
     }
 
-    toggleUploadImage(){
-        this.setState({showUploadFunc : !this.state.showUploadFunc})
+    async removeImage(imageID){
+        this.setState({showUploadFunc : true})
+        try {
+            const res = await axios.delete(`${API_URL}/image/${imageID}`)
+            console.log('res in deleting image', res.data)
+        } catch (err){
+            console.error(err)
+        }
     }
 
     async updateCorrectAns(ansID){
@@ -210,9 +218,13 @@ export default class Quiz extends React.Component {
         var reader = new FileReader();
         reader.readAsDataURL(img)
         reader.onloadend = () => {
-            this.setState({imgUrl: reader.result})
+            this.setState({image: {
+                ...this.state.image,
+                image_url: reader.result
+            }
+        })
         }
-        this.toggleUploadImage()
+        this.setState({showUploadFunc: false})
 
         const formData = new FormData()
         formData.append(0, img)
@@ -259,10 +271,10 @@ export default class Quiz extends React.Component {
                         <div className="delete-icon">
                             <FontAwesomeIcon
                                 icon = {faTimesCircle}
-                                onClick={() => this.toggleUploadImage()}
+                                onClick={() => this.removeImage(this.state.image.id)}
                             />
                         </div>
-                        <img src={this.state.imgUrl} className="image-frame" />
+                        <img src={this.state.image.image_url} className="image-frame" />
                       </div>
                     : <div className="image">
                         <p>Image goes here</p>
