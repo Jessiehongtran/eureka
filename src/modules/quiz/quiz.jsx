@@ -33,6 +33,7 @@ export default class Quiz extends React.Component {
                     isCorrect: false
                 }
             ],
+            image_uploading: false,
             image: {
                 image_url: ""
             },
@@ -171,6 +172,7 @@ export default class Quiz extends React.Component {
                                         'Content-Type': 'multipart/form-data'
                                         }
                                     })
+            this.getImage(this.props.sessionID)
             console.log('res in uploading image', res.data)
         } catch (err){
             console.error(err)
@@ -184,6 +186,7 @@ export default class Quiz extends React.Component {
             if (res.data.length > 0){
                 this.setState({
                     image: res.data[0],
+                    image_uploading: false,
                     showUploadFunc: false
                 })
             }
@@ -215,16 +218,19 @@ export default class Quiz extends React.Component {
 
     handleChangeImage(e){
         const img = e.target.files[0]
-        var reader = new FileReader();
-        reader.readAsDataURL(img)
-        reader.onloadend = () => {
-            this.setState({image: {
-                ...this.state.image,
-                image_url: reader.result
-            }
+        // var reader = new FileReader();
+        // reader.readAsDataURL(img)
+        // reader.onloadend = () => {
+        //     this.setState({image: {
+        //         ...this.state.image,
+        //         image_url: reader.result
+        //     }
+        // })
+        // }
+        this.setState({
+            showUploadFunc: false,
+            image_uploading: true
         })
-        }
-        this.setState({showUploadFunc: false})
 
         const formData = new FormData()
         formData.append(0, img)
@@ -267,15 +273,17 @@ export default class Quiz extends React.Component {
                         
                     />
                     {!this.state.showUploadFunc 
-                    ? <div className="image-container">
-                        <div className="delete-icon">
-                            <FontAwesomeIcon
-                                icon = {faTimesCircle}
-                                onClick={() => this.removeImage(this.state.image.id)}
-                            />
+                    ? !this.state.image_uploading
+                      ? <div className="image-container">
+                            <div className="delete-icon">
+                                <FontAwesomeIcon
+                                    icon = {faTimesCircle}
+                                    onClick={() => this.removeImage(this.state.image.id)}
+                                />
+                            </div>
+                            <img src={this.state.image.image_url} className="image-frame" />
                         </div>
-                        <img src={this.state.image.image_url} className="image-frame" />
-                      </div>
+                      : <p>loading the image...</p>
                     : <div className="image">
                         <p>Image goes here</p>
                         <label className="upload">
