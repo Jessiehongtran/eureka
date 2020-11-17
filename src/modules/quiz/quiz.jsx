@@ -49,7 +49,8 @@ export default class Quiz extends React.Component {
 
     componentDidMount(){
         this.getQuestion(this.props.sessionID);
-        this.getChoices(this.props.sessionID)
+        this.getChoices(this.props.sessionID);
+        this.getImage(this.props.sessionID);
     }
 
     async postQuestion(question){
@@ -160,7 +161,34 @@ export default class Quiz extends React.Component {
 
     }
 
+    async postImage(imageData){
+        console.log('imageData', imageData)
+        try {
+            const res = await axios.post(`${API_URL}/image/session/${this.props.sessionID}`, imageData, {
+                                        headers: {
+                                        'Content-Type': 'multipart/form-data'
+                                        }
+                                    })
+            console.log('res in uploading image', res.data)
+        } catch (err){
+            console.error(err)
+        }
+    }
 
+    async getImage(sessionID){
+        try {
+            const res = await axios.get(`${API_URL}/image/session/${sessionID}`)
+            console.log('res in getting image', res.data)
+            if (res.data.length > 0){
+                this.setState({
+                    imgUrl: res.data[0].image_url,
+                    showUploadFunc: false
+                })
+            }
+        } catch (err){
+            console.error(err)
+        }
+    }
 
     toggleUploadImage(){
         this.setState({showUploadFunc : !this.state.showUploadFunc})
@@ -178,7 +206,6 @@ export default class Quiz extends React.Component {
     }
 
     handleChangeImage(e){
-        console.log('files', e.target.files)
         const img = e.target.files[0]
         var reader = new FileReader();
         reader.readAsDataURL(img)
@@ -186,6 +213,10 @@ export default class Quiz extends React.Component {
             this.setState({imgUrl: reader.result})
         }
         this.toggleUploadImage()
+
+        const formData = new FormData()
+        formData.append(0, img)
+        this.postImage(formData)
     }
 
     handleChangeAnswer(e, ind){
@@ -197,6 +228,7 @@ export default class Quiz extends React.Component {
             choices: choices
         })
     }
+
 
     handleChangeQuestion(e){
         this.setState({
