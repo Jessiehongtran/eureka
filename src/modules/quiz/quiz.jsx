@@ -3,10 +3,10 @@ import './quiz.scss';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { API_URL } from '../../apiConfig';
 
-export default class Quiz extends React.Component {
+class Quiz extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -260,6 +260,8 @@ export default class Quiz extends React.Component {
     render(){
         const { question, choices } = this.state;
 
+        const { isPublished } = this.props;
+
         return (
             <div className="quiz">
                 <div className="wrapper">
@@ -270,7 +272,7 @@ export default class Quiz extends React.Component {
                         value={question.question_text}
                         onChange={this.handleChangeQuestion}
                         onBlur= {this.saveQuestion}
-                        
+                        disabled={isPublished ? true : false}
                     />
                     {!this.state.showUploadFunc 
                     ? !this.state.image_uploading
@@ -319,3 +321,11 @@ export default class Quiz extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        isPublished: state.courseReducer.isPublished
+    }
+}
+
+export default connect(mapStateToProps, {})(Quiz);

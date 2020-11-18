@@ -1,6 +1,7 @@
 import React from 'react';
 import './createCourse.scss';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { API_URL } from '../../apiConfig';
 import DragDrop1 from '../../modules/dragdrop1/forInput/dragdrop1.input';
 import DragDrop2 from '../../modules/dragdrop2/dragdrop2';
@@ -10,8 +11,9 @@ import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
 import Editor from '../createCourse/editor/editor';
+import { publishCourse } from '../../duck/actions/courseActions';
 
-export default class CreateCourse extends React.Component {
+class CreateCourse extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -171,7 +173,7 @@ export default class CreateCourse extends React.Component {
                     </button>
                     <button 
                             className="publish-btn"
-                            
+                            onClick={() => this.props.publishCourse(true)}
                     >
                         Publish course
                     </button>
@@ -194,3 +196,11 @@ export default class CreateCourse extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+       state
+    }
+}
+
+export default connect(mapStateToProps, { publishCourse })(CreateCourse);
