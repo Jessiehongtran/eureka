@@ -41,6 +41,14 @@ class CreateCourse extends React.Component {
         this.getSessions()
         //get modules 
         this.getModules()
+        //display the first module if any
+        setTimeout( function(){
+            if (this.state.sessions.length > 0){
+                    const firstSession = this.state.sessions[0]
+                    const firstSessionID = firstSession.sessionID
+                    this.displaySession(firstSessionID)
+                }
+        }.bind(this), 1000)
     }
 
 
@@ -59,6 +67,9 @@ class CreateCourse extends React.Component {
 
             //display session
             this.displaySession(newSessionID)
+
+            //get session
+            this.getSessions()
         } catch (err){
             console.error(err)
         }
@@ -69,6 +80,7 @@ class CreateCourse extends React.Component {
         try {
             const res = await axios.get(`${API_URL}/session/${parseInt(sessionID)}`)
             session = res.data
+            console.log('got a session')
         } catch (err) {
             console.error(err)
         }
@@ -80,11 +92,6 @@ class CreateCourse extends React.Component {
         try {
             const res = await axios.get(`${API_URL}/session/course/${courseID}`)
             this.setState({sessions: res.data})
-            if (res.data.length > 0){
-                const firstSession = res.data[0]
-                const firstSessionID = firstSession.sessionID
-                this.displaySession(firstSessionID)
-            }
         } catch (err){
             console.error(err)
         }
@@ -120,7 +127,7 @@ class CreateCourse extends React.Component {
     }
 
     async displaySession(sessionID){
-
+        console.log('display session', sessionID)
         //get the session and the module
         const selectedSession = await this.getASpecificSession(sessionID)
 
@@ -153,6 +160,8 @@ class CreateCourse extends React.Component {
     render(){
         const { sessions, showModuleMenu, modules, componentToDisplay } = this.state;
 
+        console.log('sessions', sessions)
+
         return (
             <div className="create-container">
                 <div className="content-list">
@@ -166,14 +175,14 @@ class CreateCourse extends React.Component {
                                                 </div>)
                     : null}
                     <button 
-                            className="add-btn"
-                            onClick={(e) => this.displayModuleMenu(e)}
+                        className="add-btn"
+                        onClick={(e) => this.displayModuleMenu(e)}
                     >
                         Add content
                     </button>
                     <button 
-                            className="publish-btn"
-                            onClick={() => this.props.publishCourse(true)}
+                        className="publish-btn"
+                        onClick={() => this.props.publishCourse(true)}
                     >
                         Publish course
                     </button>

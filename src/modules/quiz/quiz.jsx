@@ -51,6 +51,7 @@ class Quiz extends React.Component {
     }
 
     componentDidMount(){
+        console.log('quiz rendered', this.props.sessionID)
         this.getQuestion(this.props.sessionID);
         this.getChoices(this.props.sessionID);
         this.getImage(this.props.sessionID);
@@ -218,15 +219,6 @@ class Quiz extends React.Component {
 
     handleChangeImage(e){
         const img = e.target.files[0]
-        // var reader = new FileReader();
-        // reader.readAsDataURL(img)
-        // reader.onloadend = () => {
-        //     this.setState({image: {
-        //         ...this.state.image,
-        //         image_url: reader.result
-        //     }
-        // })
-        // }
         this.setState({
             showUploadFunc: false,
             image_uploading: true
@@ -261,6 +253,8 @@ class Quiz extends React.Component {
         const { question, choices } = this.state;
 
         const { isPublished } = this.props;
+
+        console.log('sessionID in quiz', this.props.sessionID)
 
         return (
             <div className="quiz">
