@@ -307,6 +307,7 @@ class Quiz extends React.Component {
                                     value={choice.choice_text}
                                     onChange={e=> this.handleChangeAnswer(e, choice.id)}
                                     onBlur= {e => this.saveChoice(e, choice.id)}
+                                    disabled={isPublished ? true : false}
                                 />
                                 <input 
                                     type="radio"

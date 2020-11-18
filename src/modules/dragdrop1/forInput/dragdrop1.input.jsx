@@ -1,10 +1,10 @@
 import React from 'react';
 import '../dragdrop1.scss';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../../apiConfig';
+import { connect } from 'react-redux'
 
-export default class InputDragDrop1 extends React.Component {
+class InputDragDrop1 extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -275,6 +275,7 @@ export default class InputDragDrop1 extends React.Component {
                 }
             }
 
+        const { isPublished } = this.props;
        
         return (
             <div className="container">
@@ -286,7 +287,7 @@ export default class InputDragDrop1 extends React.Component {
                         value={this.state.header && this.state.header.text ? this.state.header.text : ""}
                         onChange={this.handleChangeHeader}
                         onBlur={this.handleBlurHeader}
-                       
+                        disabled={isPublished ? true : false}
                     />
                     <div className="ans">
                         <input
@@ -325,18 +326,30 @@ export default class InputDragDrop1 extends React.Component {
                                 value={cate.category_name ? cate.category_name : ""}
                                 onChange={e => this.handleChangeCategory(e, cate.id)}
                                 onBlur={e => this.handleBlurCategory(e, cate.id)}
+                                disabled={isPublished ? true : false}
                             />
                             {new_changes[cate.category_name]}
                         </div>
                         )
                     : null
                     }
-                    <button 
+                    {!isPublished
+                    ? <button 
                         className="add-cate-btn"
                         onClick={() => this.addCategory()}
-                    >Add category</button>
+                      >Add category</button>
+                    : null}
+                    
                 </div>
             </div>
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        isPublished: state.courseReducer.isPublished
+    }
+}
+
+export default connect(mapStateToProps, {})(InputDragDrop1);
