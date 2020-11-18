@@ -169,6 +169,12 @@ export default class CreateCourse extends React.Component {
                     >
                         Add content
                     </button>
+                    <button 
+                            className="publish-btn"
+                            
+                    >
+                        Publish course
+                    </button>
                 </div>
                 <div className="content-editor">
                     <Editor component={this.state.componentToDisplay}/>
