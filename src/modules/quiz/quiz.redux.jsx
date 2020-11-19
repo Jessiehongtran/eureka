@@ -13,7 +13,7 @@ class Quiz extends React.Component {
 
     handleChangeQuestion(e, questionID){
         const newQuestion = {
-            questionID: questionID,
+            id: questionID,
             question_text: e.target.value
         }
         this.props.updateQuestion(newQuestion);
@@ -22,7 +22,7 @@ class Quiz extends React.Component {
     handleChangeAnswer(e, choiceID){
         console.log('here', e.target.value)
         this.props.updateChoice({
-            choiceID: choiceID,
+            id: choiceID,
             choice_text: e.target.value
         });
     }
@@ -41,18 +41,18 @@ class Quiz extends React.Component {
                         className="ques-input"
                         placeholder="Click to type a question"
                         value={question.question_text}
-                        onChange={e => this.handleChangeQuestion(e, question.questionID)}
+                        onChange={e => this.handleChangeQuestion(e, question.id)}
                         // onBlur= {this.saveQuestion}
                         // disabled={isPublished ? true : false}
                     />
                     <div className="answers">
                         {choices.map(choice => 
-                            <div className="each" key={choice.choiceID}>
+                            <div className="each" key={choice.id}>
                                 <input
                                     type="text"
                                     className="ans-input"
                                     value={choice.choice_text}
-                                    onChange={e=> this.handleChangeAnswer(e, choice.choiceID)}
+                                    onChange={e=> this.handleChangeAnswer(e, choice.id)}
                                     // onBlur= {e => this.saveChoice(e, choice.id)}
                                     // disabled={isPublished ? true : false}
                                 />
