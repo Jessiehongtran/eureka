@@ -1,159 +1,213 @@
 import React from 'react';
 import './createCourse.scss';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { API_URL } from '../../apiConfig';
 import DragDrop1 from '../../modules/dragdrop1/forInput/dragdrop1.input';
 import DragDrop2 from '../../modules/dragdrop2/dragdrop2';
-import Quiz from '../../modules/quiz/quiz';
+import Quiz from '../../modules/quiz/quiz.redux';
 import Type from '../../modules/type/type';
 import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
-import Editor from '../createCourse/editor/editor';
-import axios from 'axios';
-import { API_URL } from '../../apiConfig';
+import { publishCourse } from '../../duck/actions/courseActions';
 
-export default class CreateCourse extends React.Component {
+class CreateCourse extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            clickedX: 0,
+            modules: [],
+            sessions: [],
+            showModuleMenu: false,
+            activeSessionInd: 0,
+            clickedModuleID: 0,
+            componentToDisplay: <></>,
             clickedY: 0,
-            content_boxes: [],
-            courseID: this.props.match.params.courseID,
-            total_modules: 0,
-            curSessionID: 0,
-            course_content: [],
-            componentToPass: <></>,
-            currentContentBox: 0
+            selectedSession: {},
+            displayDragDrop: false,
+            displayQuiz: false,
+            curSessionID: 0
         }
-        this.toggleDisplayModules = this.toggleDisplayModules.bind(this)
-        this.displayComponent = this.displayComponent.bind(this)
+
+        this.getSessions = this.getSessions.bind(this);
+        this.getModules = this.getModules.bind(this);
+        this.addSession = this.addSession.bind(this);
+        this.displayModuleMenu = this.displayModuleMenu.bind(this);
+        this.updateClickedModule = this.updateClickedModule.bind(this);
+        this.displaySession = this.displaySession.bind(this);
+        this.getASpecificSession = this.getASpecificSession.bind(this);
     }
 
-    toggleDisplayModules(e, i){
-        this.setState({
-            clickedX: e.clientX,
-            clickedY: e.clientY,
-            showModules: !this.state.showModules,
-            currentContentBox: i
-        })
+    componentDidMount(){
+        console.log('createCourse is mounted')
+        //get sessions of this course
+        this.getSessions()
+        //get modules 
+        this.getModules()
+        //display the first module if any
+        setTimeout( function(){
+            if (this.state.sessions.length > 0){
+                    const firstSession = this.state.sessions[0]
+                    const firstSessionID = firstSession.sessionID
+                    this.displaySession(firstSessionID, firstSession.moduleID)
+                }
+        }.bind(this), 1000)
     }
 
-    async componentDidMount(){
-        try {
-            const res = await axios.get(`${API_URL}/course/content/${this.state.courseID}`)
-            console.log('course content', res.data)
-            this.setState({course_content: res.data})
-        } catch (err){
-            console.error(err)
-        }
-    }
 
-    async createSession(moduleID){
+    async addSession(moduleID){
+        //post session without moduleId
         const session = {
-            courseID: this.state.courseID,
+            courseID: this.props.match.params.courseID,
             moduleID: moduleID,
-            order_number: this.state.total_modules + 1
+            order_number: this.state.sessions.length + 1
         }
         try {
             const res = await axios.post(`${API_URL}/session`, session)
-            const sessionID = res.data.id
-            this.setState({curSessionID: sessionID})
+            console.log('respond from posting a session', res.data)
+            const newSessionID = parseInt(res.data.id);
+            console.log('newSessionID', newSessionID)
+
+            //display session
+            this.displaySession(newSessionID, res.data.moduleID)
+
+            //get session
+            this.getSessions()
         } catch (err){
             console.error(err)
         }
     }
 
-    addContentBox(){
-        this.setState({
-            content_boxes: [
-                ...this.state.content_boxes,
-                {module: ""}
-            ]
-        })
+    async getASpecificSession(sessionID){
+        let session = null
+        try {
+            const res = await axios.get(`${API_URL}/session/${parseInt(sessionID)}`)
+            session = res.data
+            console.log('got a session')
+        } catch (err) {
+            console.error(err)
+        }
+        return session
     }
 
-    getContentByModule(moduleId){
-        const { course_content } = this.state
-        for (let i = 0; i < course_content.length; i++){
-            if (moduleId === course_content[i].moduleID){
-                return course_content[i] //but what if there are more than one for a module?
-            }
+    async getSessions(){
+        const courseID = this.props.match.params.courseID
+        try {
+            const res = await axios.get(`${API_URL}/session/course/${courseID}`)
+            this.setState({sessions: res.data})
+        } catch (err){
+            console.error(err)
         }
     }
 
-    displayComponent(component, module){
-        //create session with module here
-        
-        const { content_boxes, currentContentBox } = this.state;
-        content_boxes[currentContentBox].module = module
-        this.setState({
-            componentToPass: component,
-            content_boxes: content_boxes
+    async getModules(){
+        try {
+            const res = await axios.get(`${API_URL}/module`)
+            this.setState({modules: res.data})
+        } catch (err){
+            console.error(err)
+        }
+    }
+
+
+    displayModuleMenu(e){
+        //display or hide module menu
+        this.setState({ 
+            clickedY: e.clientY,
+            showModuleMenu: true,
         })
+
+    }
+
+    updateClickedModule(moduleID){
+        //update clickedModuleID state
+        this.setState({ 
+            clickedModuleID: moduleID,
+            showModuleMenu: false //close module menu
+        })
+        //add session
+        this.addSession(moduleID)
+    }
+
+    async displaySession(sessionID, moduleID){
+        //get the component of the module and update the state componentToDisplay
+        if (moduleID === 1){
+            this.setState({ componentToDisplay: <DragDrop1 sessionID={sessionID} />})
+        } 
+        else if (moduleID === 2){
+            this.setState({ componentToDisplay: <DragDrop2 sessionID={sessionID} />})
+        } 
+        else if (moduleID === 3){
+            this.setState({ componentToDisplay: <Quiz sessionID={sessionID} />})
+        } 
+        else if (moduleID === 4){
+            this.setState({ componentToDisplay: <Slider sessionID={sessionID} />})
+        } 
+        else if (moduleID === 5){
+            this.setState({ componentToDisplay: <Type sessionID={sessionID} />})
+        } 
+        else if (moduleID === 6){
+            this.setState({ componentToDisplay: <Video sessionID={sessionID} />})
+        } 
+        else if (moduleID === 7){
+            this.setState({ componentToDisplay: <WordRain sessionID={sessionID} />})
+        } 
     }
 
     render(){
+        const { sessions, showModuleMenu, modules, componentToDisplay } = this.state;
 
-        console.log('courseID', this.props.match.params.courseID)
+        console.log('sessions', sessions)
 
         return (
             <div className="create-container">
                 <div className="content-list">
-                    {this.state.content_boxes.map((content,i) => <div 
-                                                                className="content-shrink"
-                                                                onClick={(e) => this.toggleDisplayModules(e, i)}
-                                                             >   
-                                                             {content.module.length > 0 ? content.module : null}
-                                                             </div>
-                    )}
+                    {sessions.length > 0
+                    ? sessions.map((session) => <div 
+                                                    key={session.sessionID}
+                                                    className="each-session"
+                                                    onClick={() => this.displaySession(session.sessionID, session.moduleID)}
+                                                >   
+                                                    {session.module_name}
+                                                    {session.moduleID}
+                                                </div>)
+                    : null}
                     <button 
                         className="add-btn"
-                        onClick={() => this.addContentBox()}
-                    >Add content</button>
+                        onClick={(e) => this.displayModuleMenu(e)}
+                    >
+                        Add content
+                    </button>
+                    <button 
+                        className="publish-btn"
+                        onClick={() => this.props.publishCourse(true)}
+                    >
+                        Publish course
+                    </button>
                 </div>
                 <div className="content-editor">
-                    <Editor component={this.state.componentToPass}/>
+                    {componentToDisplay}
                 </div>
-                {this.state.showModules
-                ? <div className="module-options" style={{top: this.state.clickedY - 40 + 'px'}}>
-                    <div className="option" onClick={() => this.displayComponent(<DragDrop1 />, "Drag and drop 1")}>
-                        <p className="module-name">
-                            Drag and drop 1
-                        </p>
-                    </div>
-                    <div className="option" onClick={() => this.displayComponent(<DragDrop2 />, "Drag and drop 2")}>
-                        <p className="module-name">
-                            Drag and drop 2
-                        </p>
-                    </div>
-                    <div className="option" onClick={() => this.displayComponent(<Quiz />, "Quiz")}>
-                        <p className="module-name">
-                            Quiz
-                        </p>
-                    </div>
-                    <div className="option" onClick={() => this.displayComponent(<Slider />, "Slider")}>
-                        <p className="module-name">
-                            Slider
-                        </p>
-                    </div>
-                    <div className="option" onClick={() => this.displayComponent(<Type />, "Type")}>
-                        <p className="module-name">
-                            Type
-                        </p>
-                    </div>
-                    <div className="option" onClick={() => this.displayComponent(<Video />, "Video")}>
-                        <p className="module-name">
-                            Video
-                        </p>
-                    </div>
-                    <div className="option" onClick={() => this.displayComponent(<WordRain />, "Word Rain")}>
-                        <p className="module-name">
-                            Word Rain
-                        </p>
-                    </div>
+                {showModuleMenu
+                ? <div className="module-menu" style={{top: this.state.clickedY - 40 + 'px'}}>
+                    {modules 
+                    ? modules.map((module, moduleInd) =>  <div key={moduleInd} className="option" onClick={() => this.updateClickedModule(module.id)}>
+                                                            <p className="module-name">
+                                                                {module.module_name}
+                                                            </p>
+                                                         </div>)
+                    : null}
                   </div>
-                : null}
+                : null }
             </div>
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+       state
+    }
+}
+
+export default connect(mapStateToProps, { publishCourse })(CreateCourse);

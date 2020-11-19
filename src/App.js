@@ -15,7 +15,7 @@ import Transition from './modules/transition/transition';
 import Slider from './modules/slider/slider';
 import Quiz from './modules/quiz/quiz';
 import Video from './modules/video/video';
-import CreateCourse2 from './courses/createCourse/createCourse2';
+import CreateCourse from './courses/createCourse/createCourse';
 import InputDragDrop1 from './modules/dragdrop1/forInput/dragdrop1.input';
 import CourseMedium from './courses/createCourse/medium/course.medium';
 
@@ -57,7 +57,7 @@ const App = () => {
           props => {
             return (
               <>
-                <CreateCourse2 {...props} />
+                <CreateCourse {...props} />
               </>
             )
           }
