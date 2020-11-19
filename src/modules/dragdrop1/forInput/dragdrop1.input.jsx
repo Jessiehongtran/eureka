@@ -103,10 +103,15 @@ class InputDragDrop1 extends React.Component {
 
     handleChangeHeader(e){
         console.log('change')
-        this.setState({header: e.target.value})
+        this.setState({header: {
+            ...this.state.header,
+            text: e.target.value
+        }
+    })
     }
 
     componentDidMount(){
+        console.log('drag and drop 1 is mounted')
         if (this.props.sessionID){
             this.getHeader(this.props.sessionID);
             this.getCategory(this.props.sessionID);

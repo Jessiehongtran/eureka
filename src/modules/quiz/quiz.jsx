@@ -51,7 +51,7 @@ class Quiz extends React.Component {
     }
 
     componentDidMount(){
-        console.log('quiz rendered', this.props.sessionID)
+        console.log('quiz is mounted', this.props.sessionID)
         this.getQuestion(this.props.sessionID);
         this.getChoices(this.props.sessionID);
         this.getImage(this.props.sessionID);
@@ -105,7 +105,9 @@ class Quiz extends React.Component {
     async getQuestion(sessionID){
         try {
             const res = await axios.get(`${API_URL}/question/session/${sessionID}`)
-            this.setState({question: res.data})
+            if (res.data){
+                this.setState({question: res.data})
+            }
         } catch (err){
             console.error(err)
         }
@@ -114,7 +116,9 @@ class Quiz extends React.Component {
     async getChoices(sessionID){
         try {
             const res = await axios.get(`${API_URL}/choice/session/${sessionID}`)
-            this.setState({choices: res.data})
+            if (res.data.length > 0){
+                this.setState({choices: res.data})
+            }
         } catch (err){
             console.error(err)
         }
@@ -255,6 +259,7 @@ class Quiz extends React.Component {
         const { isPublished } = this.props;
 
         console.log('sessionID in quiz', this.props.sessionID)
+        console.log('choices', choices)
 
         return (
             <div className="quiz">

@@ -8,7 +8,13 @@ export default class Editor extends React.Component {
         }
     }
 
+
+    componentDidMount(){
+        console.log('editor component is mounted')
+    }
+
     render(){
+        console.log('editor is rendered')
 
         return (
             <>

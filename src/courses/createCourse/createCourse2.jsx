@@ -10,7 +10,6 @@ import Type from '../../modules/type/type';
 import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
-import Editor from '../createCourse/editor/editor';
 import { publishCourse } from '../../duck/actions/courseActions';
 
 class CreateCourse extends React.Component {
@@ -24,7 +23,10 @@ class CreateCourse extends React.Component {
             clickedModuleID: 0,
             componentToDisplay: <></>,
             clickedY: 0,
-            selectedSession: {}
+            selectedSession: {},
+            displayDragDrop: false,
+            displayQuiz: false,
+            curSessionID: 0
         }
 
         this.getSessions = this.getSessions.bind(this);
@@ -37,6 +39,7 @@ class CreateCourse extends React.Component {
     }
 
     componentDidMount(){
+        console.log('createCourse is mounted')
         //get sessions of this course
         this.getSessions()
         //get modules 
@@ -46,7 +49,7 @@ class CreateCourse extends React.Component {
             if (this.state.sessions.length > 0){
                     const firstSession = this.state.sessions[0]
                     const firstSessionID = firstSession.sessionID
-                    this.displaySession(firstSessionID)
+                    this.displaySession(firstSessionID, firstSession.moduleID)
                 }
         }.bind(this), 1000)
     }
@@ -66,7 +69,7 @@ class CreateCourse extends React.Component {
             console.log('newSessionID', newSessionID)
 
             //display session
-            this.displaySession(newSessionID)
+            this.displaySession(newSessionID, res.data.moduleID)
 
             //get session
             this.getSessions()
@@ -126,33 +129,27 @@ class CreateCourse extends React.Component {
         this.addSession(moduleID)
     }
 
-    async displaySession(sessionID){
-        console.log('display session', sessionID)
-        //get the session and the module
-        const selectedSession = await this.getASpecificSession(sessionID)
-
-
+    async displaySession(sessionID, moduleID){
         //get the component of the module and update the state componentToDisplay
-        const selectedModuleID = selectedSession.moduleID
-        if (selectedModuleID === 1){
+        if (moduleID === 1){
             this.setState({ componentToDisplay: <DragDrop1 sessionID={sessionID} />})
         } 
-        else if (selectedModuleID === 2){
+        else if (moduleID === 2){
             this.setState({ componentToDisplay: <DragDrop2 sessionID={sessionID} />})
         } 
-        else if (selectedModuleID === 3){
+        else if (moduleID === 3){
             this.setState({ componentToDisplay: <Quiz sessionID={sessionID} />})
         } 
-        else if (selectedModuleID === 4){
+        else if (moduleID === 4){
             this.setState({ componentToDisplay: <Slider sessionID={sessionID} />})
         } 
-        else if (selectedModuleID === 5){
+        else if (moduleID === 5){
             this.setState({ componentToDisplay: <Type sessionID={sessionID} />})
         } 
-        else if (selectedModuleID === 6){
+        else if (moduleID === 6){
             this.setState({ componentToDisplay: <Video sessionID={sessionID} />})
         } 
-        else if (selectedModuleID === 7){
+        else if (moduleID === 7){
             this.setState({ componentToDisplay: <WordRain sessionID={sessionID} />})
         } 
     }
@@ -169,9 +166,10 @@ class CreateCourse extends React.Component {
                     ? sessions.map((session) => <div 
                                                     key={session.sessionID}
                                                     className="each-session"
-                                                    onClick={() => this.displaySession(session.sessionID)}
+                                                    onClick={() => this.displaySession(session.sessionID, session.moduleID)}
                                                 >   
                                                     {session.module_name}
+                                                    {session.moduleID}
                                                 </div>)
                     : null}
                     <button 
@@ -188,7 +186,7 @@ class CreateCourse extends React.Component {
                     </button>
                 </div>
                 <div className="content-editor">
-                    <Editor component={this.state.componentToDisplay}/>
+                    {componentToDisplay}
                 </div>
                 {showModuleMenu
                 ? <div className="module-menu" style={{top: this.state.clickedY - 40 + 'px'}}>
