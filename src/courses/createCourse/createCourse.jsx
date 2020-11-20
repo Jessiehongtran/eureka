@@ -158,6 +158,52 @@ class CreateCourse extends React.Component {
         } 
     }
 
+    handleDragStart(e, sessionID){
+        console.log('drag start', sessionID)
+        e.dataTransfer.setData('id', sessionID)
+    }
+
+    handleDragOver(e, sessionID){
+        e.preventDefault()
+        console.log('drag over', sessionID)
+    }
+
+    handleDragEnter(e, ind){
+        //to add a session there 
+        // let { sessions } = this.state;
+        // sessions.splice(ind + 1, 0, {sessionID: 0})
+        // this.setState({sessions: sessions})
+    }
+
+    swapSessions(arriveSessionID, departSessionID, sessions){
+        let deSession, deSessionInd, arrSession, arrSessionInd
+        for (let i = 0; i < sessions.length; i++){
+            if (sessions[i].sessionID === departSessionID){
+                deSession = sessions[i]
+                deSessionInd = i
+            }
+            if (sessions[i].sessionID === arriveSessionID){
+                arrSession = sessions[i]
+                arrSessionInd = i
+            }      
+        }
+
+        sessions[deSessionInd] = arrSession;
+        sessions[arrSessionInd] = deSession;
+       
+        return sessions
+    }
+
+    handleDrop(e, sessionID){
+        const departInd = parseInt(e.dataTransfer.getData('id'))
+        const arriveInd = sessionID
+        console.log('drop',arriveInd, departInd)
+        const newSessions = this.swapSessions(arriveInd, departInd, this.state.sessions)
+        console.log('newSessions', newSessions)
+        this.setState({sessions: newSessions})
+        
+    }
+
     render(){
         const { sessions, showModuleMenu, modules, componentToDisplay } = this.state;
 
@@ -167,10 +213,15 @@ class CreateCourse extends React.Component {
             <div className="create-container">
                 <div className="content-list">
                     {sessions.length > 0
-                    ? sessions.map((session) => <div 
+                    ? sessions.map((session, ind) => <div 
                                                     key={session.sessionID}
                                                     className="each-session"
                                                     onClick={() => this.displaySession(session.sessionID, session.moduleID)}
+                                                    draggable
+                                                    onDragStart={e => this.handleDragStart(e, session.sessionID)}
+                                                    onDragOver ={e => this.handleDragOver(e, session.sessionID)}
+                                                    onDragEnter={e => this.handleDragEnter(e, ind)}
+                                                    onDrop={e => this.handleDrop(e, session.sessionID)}
                                                 >   
                                                     {session.module_name}
                                                 </div>)
