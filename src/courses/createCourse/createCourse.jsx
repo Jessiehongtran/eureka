@@ -37,6 +37,7 @@ class CreateCourse extends React.Component {
         this.updateClickedModule = this.updateClickedModule.bind(this);
         this.displaySession = this.displaySession.bind(this);
         this.getASpecificSession = this.getASpecificSession.bind(this);
+        this.arrangeSessionsByOrder = this.arrangeSessionsByOrder.bind(this);
     }
 
     componentDidMount(){
@@ -53,6 +54,7 @@ class CreateCourse extends React.Component {
                     this.displaySession(firstSessionID, firstSession.moduleID)
                 }
         }.bind(this), 1000)
+        
     }
 
 
@@ -91,11 +93,31 @@ class CreateCourse extends React.Component {
         return session
     }
 
+    arrangeSessionsByOrder(sessions){
+        let tempArr = new Array(sessions.length)
+        sessions.forEach(session => tempArr[session.order_number - 1] = session)
+        console.log('tempArr', tempArr)
+        this.setState({sessions: tempArr})
+    }
+
     async getSessions(){
         const courseID = this.props.match.params.courseID
         try {
             const res = await axios.get(`${API_URL}/session/course/${courseID}`)
-            this.setState({sessions: res.data})
+            //arrange sessions according to order_number
+            if (res.data.length > 0){
+                this.arrangeSessionsByOrder(res.data)
+            }
+        } catch (err){
+            console.error(err)
+        }
+    }
+
+    async updateSession(change, sessionID){
+        try {
+            const res = await axios.patch(`${API_URL}/session/${sessionID}`, change)
+            console.log('res in updating session', res.data)
+            // this.getSessions()
         } catch (err){
             console.error(err)
         }
@@ -175,22 +197,29 @@ class CreateCourse extends React.Component {
         // this.setState({sessions: sessions})
     }
 
-    swapSessions(arriveSessionID, departSessionID, sessions){
+    swapSessionOrder(arriveSessionID, departSessionID, sessions){
         let deSession, deSessionInd, arrSession, arrSessionInd
         for (let i = 0; i < sessions.length; i++){
-            if (sessions[i].sessionID === departSessionID){
-                deSession = sessions[i]
-                deSessionInd = i
-            }
-            if (sessions[i].sessionID === arriveSessionID){
-                arrSession = sessions[i]
-                arrSessionInd = i
-            }      
+            if (sessions[i]){
+                if (sessions[i].sessionID === departSessionID){
+                    deSession = sessions[i]
+                    deSessionInd = i
+                }
+                if (sessions[i].sessionID === arriveSessionID){
+                    arrSession = sessions[i]
+                    arrSessionInd = i
+                }    
+            }  
         }
 
-        sessions[deSessionInd] = arrSession;
-        sessions[arrSessionInd] = deSession;
-       
+        let origin = sessions[deSessionInd].order_number 
+        sessions[deSessionInd].order_number = arrSession.order_number; 
+        //update this to backend
+        this.updateSession({ order_number: arrSession.order_number }, departSessionID)
+        sessions[arrSessionInd].order_number = origin; 
+        //update this to backend
+        this.updateSession({ order_number: origin }, arriveSessionID)
+        
         return sessions
     }
 
@@ -198,9 +227,9 @@ class CreateCourse extends React.Component {
         const departInd = parseInt(e.dataTransfer.getData('id'))
         const arriveInd = sessionID
         console.log('drop',arriveInd, departInd)
-        const newSessions = this.swapSessions(arriveInd, departInd, this.state.sessions)
+        const newSessions = this.swapSessionOrder(arriveInd, departInd, this.state.sessions)
         console.log('newSessions', newSessions)
-        this.setState({sessions: newSessions})
+        this.arrangeSessionsByOrder(newSessions)
         
     }
 

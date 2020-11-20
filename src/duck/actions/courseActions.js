@@ -27,7 +27,6 @@ export const createSession = () => {
 }
 
 
-
 export const getContent = (sessionID, moduleID) => {
     return async dispatch => {
         try {
@@ -45,3 +44,4 @@ export const getContent = (sessionID, moduleID) => {
         }
     }
 }
+
