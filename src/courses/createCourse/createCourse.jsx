@@ -11,7 +11,7 @@ import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
 import { publishCourse } from '../../duck/actions/courseActions';
-import { getQuestion } from '../../duck/actions/quizActions';
+import { getQuestion, getChoices } from '../../duck/actions/quizActions';
 
 class CreateCourse extends React.Component {
     constructor(props){
@@ -142,6 +142,7 @@ class CreateCourse extends React.Component {
         else if (moduleID === 3){
             this.setState({ componentToDisplay: <Quiz sessionID={sessionID} />})
             this.props.getQuestion(sessionID)
+            this.props.getChoices(sessionID)
         } 
         else if (moduleID === 4){
             this.setState({ componentToDisplay: <Slider sessionID={sessionID} />})
@@ -172,7 +173,6 @@ class CreateCourse extends React.Component {
                                                     onClick={() => this.displaySession(session.sessionID, session.moduleID)}
                                                 >   
                                                     {session.module_name}
-                                                    {session.moduleID}
                                                 </div>)
                     : null}
                     <button 
@@ -213,4 +213,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { publishCourse, getQuestion })(CreateCourse);
+export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices })(CreateCourse);
