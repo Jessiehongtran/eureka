@@ -39,7 +39,6 @@ class Quiz extends React.Component {
     }
 
     handleBlurAnswer(e, choiceID, sessionID){
-        console.log('handleBlurans')
         if (sessionID !== 0){
             const newChoice = {
                 id: choiceID,
@@ -48,11 +47,15 @@ class Quiz extends React.Component {
             }
             this.props.updateChoice(newChoice)
         } else {
-            const newChoice = {
-                choice_text: e.target.value,
-                sessionID: this.props.sessionID
+            if (e.target.value.length > 0){
+                const newChoice = {
+                    choice_text: e.target.value,
+                    sessionID: this.props.sessionID
+                }
+                this.props.postChoice(newChoice)
+            } else {
+                alert('Please type your answer first')
             }
-            this.props.postChoice(newChoice)
         }
     }
 
@@ -63,11 +66,15 @@ class Quiz extends React.Component {
         });
     }
 
-    updateCorrectAns(choiceID, curCorrectStatus){
-        this.props.changeChoiceCorrect({
-            id: choiceID,
-            isCorrect: !curCorrectStatus
-        });
+    updateCorrectAns(choiceID, curCorrectStatus, choiceText){
+        if (choiceText.length !== 0){
+            this.props.changeChoiceCorrect({
+                id: choiceID,
+                isCorrect: !curCorrectStatus
+            });
+        } else {
+            alert("Please type your answer first")
+        }
     }
 
     render(){
@@ -102,7 +109,7 @@ class Quiz extends React.Component {
                                     className="check-ans"
                                     checked={choice.isCorrect ? true : false}
                                     // checked={choice.isCorrect ? true : false}
-                                    onChange={() => this.updateCorrectAns(choice.id, choice.isCorrect)}
+                                    onChange={() => this.updateCorrectAns(choice.id, choice.isCorrect, choice.choice_text)}
                                 />
                             </div>)}
                         
