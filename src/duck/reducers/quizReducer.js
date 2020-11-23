@@ -1,4 +1,4 @@
-import { CHANGE_QUESTION, UPDATE_QUESTION, CHANGE_CHOICE, GET_QUESTION_FAILURE, GET_QUESTION_SUCCESS, GET_QUESTION_EMPTY, GET_ANSWERS_SUCCESS, GET_ANSWERS_EMPTY } from '../actions/quizActions';
+import { CHANGE_QUESTION, UPDATE_QUESTION, CHANGE_CHOICE, CHANGE_CHOICE_CORRECT, GET_QUESTION_FAILURE, GET_QUESTION_SUCCESS, GET_QUESTION_EMPTY, GET_ANSWERS_SUCCESS, GET_ANSWERS_EMPTY } from '../actions/quizActions';
 
 const initialState = {
     sessionID: 0,
@@ -74,6 +74,14 @@ export const quizReducer = ( state=initialState, action ) => {
                 ...state,
                 choices: state.choices.map(
                     (choice) => choice.id === action.payload.id ? {...choice, choice_text: action.payload.choice_text}
+                                            : choice
+                )
+            }
+        case CHANGE_CHOICE_CORRECT:       
+            return {
+                ...state,
+                choices: state.choices.map(
+                    (choice) => choice.id === action.payload.id ? {...choice, isCorrect: action.payload.isCorrect}
                                             : choice
                 )
             }

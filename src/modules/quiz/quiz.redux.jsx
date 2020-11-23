@@ -1,7 +1,7 @@
 import React from 'react';
 import './quiz.scss';
 import { connect } from 'react-redux';
-import { changeQuestion, updateQuestion, postQuestion, updateChoice, postChoice, changeChoice } from '../../duck/actions/quizActions';
+import { changeQuestion, updateQuestion, changeChoiceCorrect, postQuestion, updateChoice, postChoice, changeChoice } from '../../duck/actions/quizActions';
 
 class Quiz extends React.Component {
     constructor(props){
@@ -62,6 +62,13 @@ class Quiz extends React.Component {
         });
     }
 
+    updateCorrectAns(choiceID){
+        this.props.changeChoiceCorrect({
+            id: choiceID,
+            isCorrect: true
+        });
+    }
+
     render(){
         const { question, choices } = this.props;
 
@@ -92,7 +99,8 @@ class Quiz extends React.Component {
                                 <input 
                                     type="radio"
                                     className="check-ans"
-                                    // onChange={() => this.updateCorrectAns(choice.id)}
+                                    // checked={choice.isCorrect ? true : false}
+                                    onChange={() => this.updateCorrectAns(choice.id)}
                                 />
                             </div>)}
                         
@@ -113,4 +121,4 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps, {updateQuestion, changeChoice, postQuestion, changeQuestion, updateChoice, postChoice })(Quiz);
+export default connect(mapStateToProps, {updateQuestion, changeChoiceCorrect, changeChoice, postQuestion, changeQuestion, updateChoice, postChoice })(Quiz);

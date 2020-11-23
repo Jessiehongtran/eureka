@@ -16,8 +16,12 @@
         .content-shrink, .each-session {
             border: 1px solid grey;
             width: 99%;
-            min-height: 100px;
+            min-height: 120px;
             margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            
         }
 
         .add-btn {

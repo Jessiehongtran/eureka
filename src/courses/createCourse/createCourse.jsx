@@ -10,8 +10,10 @@ import Type from '../../modules/type/type';
 import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
+import QuizMini from '../../modules/quiz/quiz.mini';
 import { publishCourse } from '../../duck/actions/courseActions';
 import { getQuestion, getChoices } from '../../duck/actions/quizActions';
+import DragDropMini from '../../modules/dragdrop1/mini/dragdrop1.mini';
 
 class CreateCourse extends React.Component {
     constructor(props){
@@ -23,6 +25,7 @@ class CreateCourse extends React.Component {
             activeSessionInd: 0,
             clickedModuleID: 0,
             componentToDisplay: <></>,
+            miniComponent: <></>,
             clickedY: 0,
             selectedSession: {},
             displayDragDrop: false,
@@ -107,7 +110,19 @@ class CreateCourse extends React.Component {
             //arrange sessions according to order_number
             if (res.data.length > 0){
                 this.arrangeSessionsByOrder(res.data)
+                for (let i =0; i < this.state.sessions.length; i++){
+                    if (this.state.sessions[i].moduleID === 1){
+                        this.state.sessions[i].miniComponent = <DragDropMini/>
+                    }
+                    else if (this.state.sessions[i].moduleID === 3){
+                        this.state.sessions[i].miniComponent = <QuizMini/>
+                    } 
+                    else {
+                        this.state.sessions[i].miniComponent = <></>
+                    }
+                }
             }
+
         } catch (err){
             console.error(err)
         }
@@ -162,7 +177,9 @@ class CreateCourse extends React.Component {
             this.setState({ componentToDisplay: <DragDrop2 sessionID={sessionID} />})
         } 
         else if (moduleID === 3){
-            this.setState({ componentToDisplay: <Quiz sessionID={sessionID} />})
+            this.setState({ 
+                componentToDisplay: <Quiz sessionID={sessionID} />,
+            })
             this.props.getQuestion(sessionID)
             this.props.getChoices(sessionID)
         } 
@@ -234,7 +251,7 @@ class CreateCourse extends React.Component {
     }
 
     render(){
-        const { sessions, showModuleMenu, modules, componentToDisplay } = this.state;
+        const { sessions, showModuleMenu, modules, componentToDisplay, miniComponent } = this.state;
 
         console.log('sessions', sessions)
 
@@ -253,6 +270,7 @@ class CreateCourse extends React.Component {
                                                     onDrop={e => this.handleDrop(e, session.sessionID)}
                                                 >   
                                                     {session.module_name}
+                                                    {session.miniComponent}
                                                 </div>)
                     : null}
                     <button 

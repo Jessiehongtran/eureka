@@ -1,0 +1,42 @@
+.mini-container {
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .ques-input {
+            border: none;
+        }
+
+        .answers {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            
+
+            .each {
+                width: 35%;
+                margin: 5px 0 5px 0;
+                // background-color: yellow;
+                min-height: 14px;
+                display: flex;
+                align-items: center;
+                
+                input {
+                    width: 100%;
+                    border: 1px solid silver;
+                    min-height: 10px;
+                    margin: 0;
+                    
+                }
+
+                .check-ans {
+                    z-index: 1;
+                    margin-left: -55px;
+                }
+            }
+        }
+    }
+}

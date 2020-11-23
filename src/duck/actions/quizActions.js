@@ -14,6 +14,7 @@ export const GET_CHOICES = 'GET_CHOICES';
 export const CHANGE_CHOICE = 'CHANGE_CHOICE';
 export const UPDATE_CHOICE_FAILURE = 'UPDATE_CHOICE_FAILURE';
 export const POST_CHOICE_FAILURE = 'POST_CHOICE_FAILURE';
+export const CHANGE_CHOICE_CORRECT = 'CHANGE_CHOICE_CORRECT';
 
 export const getQuestion = (sessionID) => {
     return async dispatch => {
@@ -151,6 +152,13 @@ export const postChoice = newChoice => {
 export const changeChoice = choiceToUpdate => {
     return {
         type: CHANGE_CHOICE,
+        payload: choiceToUpdate
+    }
+}
+
+export const changeChoiceCorrect = choiceToUpdate => {
+    return {
+        type: CHANGE_CHOICE_CORRECT,
         payload: choiceToUpdate
     }
 }
