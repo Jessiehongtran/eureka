@@ -13,6 +13,7 @@ import WordRain from '../../modules/wordRain/wordRain';
 import QuizMini from '../../modules/quiz/quiz.mini';
 import { publishCourse } from '../../duck/actions/courseActions';
 import { getQuestion, getChoices } from '../../duck/actions/quizActions';
+import { getHeader, getCategory } from '../../duck/actions/dragdropActions';
 import DragDropMini from '../../modules/dragdrop1/mini/dragdrop1.mini';
 
 class CreateCourse extends React.Component {
@@ -172,7 +173,8 @@ class CreateCourse extends React.Component {
         //get the component of the module and update the state componentToDisplay
         if (moduleID === 1){
             this.setState({ componentToDisplay: <DragDrop1 sessionID={sessionID} />})
-            
+            this.props.getHeader(sessionID)
+            this.props.getCategory(sessionID)
         } 
         else if (moduleID === 2){
             this.setState({ componentToDisplay: <DragDrop2 sessionID={sessionID} />})
@@ -314,4 +316,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices })(CreateCourse);
+export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices, getHeader, getCategory })(CreateCourse);

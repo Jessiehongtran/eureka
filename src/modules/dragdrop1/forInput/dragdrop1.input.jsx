@@ -2,7 +2,8 @@ import React from 'react';
 import '../dragdrop1.scss';
 import axios from 'axios';
 import { API_URL } from '../../../apiConfig';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { getHeader, getCategory, addHeader, addCategory, changeHeader, changeCategory, updateHeader, updateCategory } from '../../../duck/actions/dragdropActions';
 
 class InputDragDrop1 extends React.Component {
     constructor(props){
@@ -102,164 +103,54 @@ class InputDragDrop1 extends React.Component {
     }
 
     handleChangeHeader(e){
-        console.log('change')
-        this.setState({header: {
-            ...this.state.header,
-            text: e.target.value
-        }
-    })
+        this.props.changeHeader(e.target.value)
     }
 
-    componentDidMount(){
-        console.log('drag and drop 1 is mounted')
-        if (this.props.sessionID){
-            this.getHeader(this.props.sessionID);
-            this.getCategory(this.props.sessionID);
-        }
-    }
-
-    async getHeader(sessionID){
-        //get header of this session
-        try {
-            const res = await axios.get(`${API_URL}/text/session/${sessionID}`)
-            console.log('res in getting header', res.data)
-            this.setState({header: res.data[0]})
-        } catch (err){
-            console.error(err)
-        }
-    }
-
-    async getCategory(sessionID){
-        //get category of this session
-        try {
-            const res = await axios.get(`${API_URL}/category/session/${sessionID}`)
-            console.log('res in getting category', res.data)
-            this.setState({category_list: res.data})
-        } catch (err){
-            console.error(err)
-        }
-    }
-
-    async postHeader(header){
-        //post header as text
-        const textToPost = {
-            text: header,
-            sessionID: this.props.sessionID
-        }
-        try {
-            const res = await axios.post(`${API_URL}/text`, textToPost)
-            console.log('res in posting header', res.data)
-        } catch (err){
-            console.error(err)
-        }
-    }
-
-    async updateHeader(newHeader, headerId){
-        const change = {
-            text: newHeader
-        }
-        try {
-            const res = await axios.patch(`${API_URL}/text/${headerId}`, change)
-            console.log('res in updating header', res.data)
-        } catch (err){
-            console.error(err)
-        }
-
-    }
-
-    async updateCategory(newCategory, categoryId){
-        const change = {
-            category_name: newCategory
-        }
-        try {
-            const res = await axios.patch(`${API_URL}/category/${categoryId}`, change)
-            console.log(res.data)
-        } catch (err){
-            console.error(err)
-        }
-    }
-
-    async deleteCategory(categoryId){
-        try {
-            const res = await axios.delete(`${API_URL}/category/${categoryId}`)
-            console.log(res.data)
-        } catch (err){
-            console.error(err)
-        }
-    }
-
-    async postCategory(category){
-        //post category
-        const categoryToPost = {
-            category_name: category,
-            sessionID: this.props.sessionID
-        }
-        try {
-            const res = await axios.post(`${API_URL}/category`, categoryToPost)
-            console.log('res in posting category', res.data)
-        } catch (err){
-            console.error(err)
-        }
-    }
 
     async handleBlurHeader(e){
-        const { header } = this.state;
+        const { header } = this.props;
         //post header if id is not there
         if (header && header.id){
-            this.updateHeader(e.target.value, header.id)
+            this.props.updateHeader({text: e.target.value}, header.id)
         } else {
-            this.postHeader(e.target.value)
+            const newHeader = {
+                text: e.target.valu,
+                sessionID: this.props.sessionID
+            }
+            this.props.addHeader(newHeader)
         }
     }
 
     handleChangeCategory(e, categoryInd){
-        const { category_list } = this.state;
-        let categoryToUpdate = category_list.filter(cate => cate.id === categoryInd)[0];
-        categoryToUpdate.category_name = e.target.value;
-        this.setState({category_list: category_list})
+        const toChangeCategory = {
+            id: categoryInd,
+            category_name: e.target.value,
+            sessionID: this.props.sessionID
+        }
+        this.props.changeCategory(toChangeCategory)
     }
 
-    async findCategory(categoryId){
-        let category = null
-        try {
-            const res = await axios.get(`${API_URL}/category/${categoryId}`)
-            category = res.data[0]
-        } catch (err){
-            console.error(err)
-        }
-        return category
-    }
 
     async handleBlurCategory(e, categoryInd){
-        //post category if id has not existed
-        const foundCategory = await this.findCategory(categoryInd);
-        console.log('foundCategory', foundCategory)
-        if (foundCategory !== undefined){
-            this.updateCategory(e.target.value, categoryInd);
-        } else {
-            this.postCategory(e.target.value);
-        }
+        this.props.updateCategory({category_name: e.target.value}, categoryInd);
+       
     }
 
     addCategory(){
         //post category to backend here
-
-        this.setState({ 
-            category_list: [
-                ...this.state.category_list,
-                {
-                    id: this.state.category_list.length + 1,
-                    category_name: "category name"
-                }
-            ]
-        })
+        const newCate = {
+            category_name: "",
+            sessionID: this.props.sessionID
+        }
+        this.props.addCategory(newCate)
     }
 
 
     render(){
 
+        const { isPublished, header, category_list } = this.props;
+
         //now we don't know category name in advance, how can we classify
-        const { category_list } = this.state;
         let new_changes = {}
         for (let i = 0; i < category_list.length; i++){
             new_changes[category_list[i].category_name] = []
@@ -279,8 +170,6 @@ class InputDragDrop1 extends React.Component {
                     )
                 }
             }
-
-        const { isPublished } = this.props;
        
         return (
             <div className="container">
@@ -289,7 +178,7 @@ class InputDragDrop1 extends React.Component {
                         type="text"
                         placeholder="Type a header..." 
                         className="header"
-                        value={this.state.header && this.state.header.text ? this.state.header.text : ""}
+                        value={header && header.text ? header.text : ""}
                         onChange={this.handleChangeHeader}
                         onBlur={this.handleBlurHeader}
                         disabled={isPublished ? true : false}
@@ -352,9 +241,12 @@ class InputDragDrop1 extends React.Component {
 }
 
 const mapStateToProps = state => {
+    console.log('state in dragdrop', state)
     return {
-        isPublished: state.courseReducer.isPublished
+        isPublished: state.courseReducer.isPublished,
+        header: state.dragdropReducer.header,
+        category_list: state.dragdropReducer.category_list
     }
 }
 
-export default connect(mapStateToProps, {})(InputDragDrop1);
+export default connect(mapStateToProps, { getHeader, getCategory, addHeader, addCategory, changeHeader, changeCategory, updateHeader, updateCategory })(InputDragDrop1);

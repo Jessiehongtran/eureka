@@ -4,9 +4,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
 
         .ques-input {
             border: none;
+            width: 90%;
+            text-align: center;
         }
 
         .answers {

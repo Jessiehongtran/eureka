@@ -66,8 +66,8 @@ export const quizReducer = ( state=initialState, action ) => {
             }
         case GET_ANSWERS_EMPTY:
             return {
-                    ...state,
-                    choices: action.payload
+                ...state,
+                choices: action.payload
             }
         case CHANGE_CHOICE:       
             return {

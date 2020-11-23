@@ -1,0 +1,42 @@
+.dragdrop-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+
+    .header {
+        border: none;
+        width: 80%;
+        text-align: center;
+        color: silver
+    }
+    .header:focus {
+        outline: none
+    }
+
+    .ans {
+        width: 80%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 5px;
+
+        .ans-input {
+            border: none;
+            border-bottom: 1px solid grey;
+            max-width: 70%;
+            margin-right: 5px;
+        }
+
+        button {
+            padding: 3px 8px 3px 8px;
+            border: none;
+            background-color: grey;
+            color: white;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+        
+    }
+}

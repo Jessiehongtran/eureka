@@ -1,6 +1,8 @@
 import React from 'react';
+import './dragdrop1.mini.scss';
+import { connect } from 'react-redux';
 
-export default class DragDropMini extends React.Component {
+class DragDropMini extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -9,11 +11,36 @@ export default class DragDropMini extends React.Component {
     }
 
     render(){
+        const { header } = this.props;
+
         return (
-            <div>
-                <h3>Mini drag and drop</h3>
+            <div className="dragdrop-mini">
+                <input
+                    type="text"
+                    placeholder="Type a header..." 
+                    className="header"
+                    value={header && header.text ? header.text : ""}
+                    diabled
+                />
+                <div className="ans">
+                    <input
+                        type="text" 
+                        className="ans-input"
+                        disabled
+                    />
+                    <button>Add</button>
+                </div>
             </div>
         )
     }
 }
 
+const mapStateToProps = state => {
+    
+    return {
+        header: state.dragdropReducer.header,
+        category_list: state.dragdropReducer.category_list
+    }
+}
+
+export default connect(mapStateToProps, {})( DragDropMini );
