@@ -39,6 +39,7 @@ class Quiz extends React.Component {
     }
 
     handleBlurAnswer(e, choiceID, sessionID){
+        console.log('handleBlurans')
         if (sessionID !== 0){
             const newChoice = {
                 id: choiceID,
@@ -62,10 +63,10 @@ class Quiz extends React.Component {
         });
     }
 
-    updateCorrectAns(choiceID){
+    updateCorrectAns(choiceID, curCorrectStatus){
         this.props.changeChoiceCorrect({
             id: choiceID,
-            isCorrect: true
+            isCorrect: !curCorrectStatus
         });
     }
 
@@ -99,14 +100,15 @@ class Quiz extends React.Component {
                                 <input 
                                     type="radio"
                                     className="check-ans"
+                                    checked={choice.isCorrect ? true : false}
                                     // checked={choice.isCorrect ? true : false}
-                                    onChange={() => this.updateCorrectAns(choice.id)}
+                                    onChange={() => this.updateCorrectAns(choice.id, choice.isCorrect)}
                                 />
                             </div>)}
                         
                     </div>
                 </div>
-            </div>
+            </div>  
         )
     }
 }

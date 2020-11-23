@@ -91,9 +91,28 @@ export const getChoices = (sessionID) => {
         try {
             const res = await Axios.get(`${API_URL}/choice/session/${sessionID}`)
             if (res.data.length > 0){
+                let choices = res.data;
+                const original_length = choices.length;
+                if (original_length < 4){
+                    let i = 0
+                    while (i < 4 - original_length ){
+                        choices.push(
+                            {
+                                id: original_length + i + 1,
+                                choice_text: "",
+                                isCorrect: false,
+                                sessionID: 0
+                            }
+                        )
+                        i += 1
+                        
+                    }
+                }
+
+                
                 dispatch({
                     type: GET_ANSWERS_SUCCESS,
-                    payload: res.data
+                    payload: choices
                 })
             } else {
                 dispatch({
