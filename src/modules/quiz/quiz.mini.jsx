@@ -32,11 +32,8 @@ class QuizMini extends React.Component {
                                     className="ans-input"
                                 />    
                                 {choice.isCorrect
-                                ? <input 
-                                    type="radio"
-                                    className="check-ans"
-                                    checked
-                                 /> 
+                                ? <div  className="check-ans">
+                                  </div>
                                 : null}
                             </div>)}
                         
