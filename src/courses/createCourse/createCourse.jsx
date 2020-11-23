@@ -99,7 +99,19 @@ class CreateCourse extends React.Component {
     arrangeSessionsByOrder(sessions){
         let tempArr = new Array(sessions.length)
         sessions.forEach(session => tempArr[session.order_number - 1] = session)
-        console.log('tempArr', tempArr)
+
+        for (let i =0; i < tempArr.length; i++){
+            if (tempArr[i].moduleID === 1){
+                tempArr[i].miniComponent = <DragDropMini/>
+            }
+            else if (tempArr[i].moduleID === 3){
+                tempArr[i].miniComponent = <QuizMini/>
+            } 
+            else {
+                tempArr[i].miniComponent = <></>
+            }
+        }
+
         this.setState({sessions: tempArr})
     }
 
@@ -110,17 +122,6 @@ class CreateCourse extends React.Component {
             //arrange sessions according to order_number
             if (res.data.length > 0){
                 this.arrangeSessionsByOrder(res.data)
-                for (let i =0; i < this.state.sessions.length; i++){
-                    if (this.state.sessions[i].moduleID === 1){
-                        this.state.sessions[i].miniComponent = <DragDropMini/>
-                    }
-                    else if (this.state.sessions[i].moduleID === 3){
-                        this.state.sessions[i].miniComponent = <QuizMini/>
-                    } 
-                    else {
-                        this.state.sessions[i].miniComponent = <></>
-                    }
-                }
             }
 
         } catch (err){
@@ -195,6 +196,8 @@ class CreateCourse extends React.Component {
         else if (moduleID === 7){
             this.setState({ componentToDisplay: <WordRain sessionID={sessionID} />})
         } 
+
+       
     }
 
     handleDragStart(e, sessionID){
