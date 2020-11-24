@@ -11,10 +11,11 @@ import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
 import QuizMini from '../../modules/quiz/mini/quiz.mini';
+import DragDropMini from '../../modules/dragdrop1/mini/dragdrop1.mini';
+import VideoMini from '../../modules/video/mini/video.mini';
 import { publishCourse } from '../../duck/actions/courseActions';
 import { getQuestion, getChoices } from '../../duck/actions/quizActions';
 import { getHeader, getCategory } from '../../duck/actions/dragdropActions';
-import DragDropMini from '../../modules/dragdrop1/mini/dragdrop1.mini';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { faClone } from '@fortawesome/free-regular-svg-icons';
@@ -122,6 +123,9 @@ class CreateCourse extends React.Component {
             else if (tempArr[i].moduleID === 3){
                 tempArr[i].miniComponent = <QuizMini/>
             } 
+            else if (tempArr[i].moduleID === 6){
+                tempArr[i].miniComponent = <VideoMini/>
+            } 
             else {
                 tempArr[i].miniComponent = <></>
             }
@@ -179,7 +183,7 @@ class CreateCourse extends React.Component {
         try {
             const res = await axios.delete(`${API_URL}/session/${sessionID}`)
             console.log('res in deleting session', res.data)
-            
+
             //reorder the sessions
             this.reOrderSessions(sessions, curOrderNumber, -1)
 
@@ -350,8 +354,6 @@ class CreateCourse extends React.Component {
     render(){
 
         const { sessions, showModuleMenu, modules, componentToDisplay, isDragging, translation } = this.state;
-
-        console.log('sessions', sessions)
 
         return (
             <div className="create-container">

@@ -1,0 +1,27 @@
+.video-mini {
+    margin-top: 10px;
+    
+    .header {
+        text-align: center;
+        border: none
+    }
+
+    .upload {
+       
+
+        .video-upload {
+            font-family: 'Poppins', sans-serif;
+            border: none;
+            background-color: grey;
+            border-radius: 4px;
+            padding: 3px 8px 3px 8px;
+            color: white;
+            font-size: 12px;
+            
+
+            input {
+                display: none
+            }
+        }
+    }
+}
