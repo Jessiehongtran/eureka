@@ -17,6 +17,7 @@ import { getHeader, getCategory } from '../../duck/actions/dragdropActions';
 import DragDropMini from '../../modules/dragdrop1/mini/dragdrop1.mini';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import { faClone } from '@fortawesome/free-regular-svg-icons';
 
 class CreateCourse extends React.Component {
     constructor(props){
@@ -50,8 +51,7 @@ class CreateCourse extends React.Component {
     }
 
     componentDidMount(){
-        console.log('createCourse is mounted')
-        //get sessions of this course
+        //get sessions 
         this.getSessions()
         //get modules 
         this.getModules()
@@ -67,8 +67,6 @@ class CreateCourse extends React.Component {
     }
 
 
-
-
     async addSession(moduleID){
         //post session without moduleId
         const session = {
@@ -76,10 +74,11 @@ class CreateCourse extends React.Component {
             moduleID: moduleID,
             order_number: this.state.sessions.length + 1
         }
+        let newSessionID
         try {
             const res = await axios.post(`${API_URL}/session`, session)
             console.log('respond from posting a session', res.data)
-            const newSessionID = parseInt(res.data.id);
+            newSessionID = parseInt(res.data.id);
             console.log('newSessionID', newSessionID)
 
             //get session
@@ -92,6 +91,8 @@ class CreateCourse extends React.Component {
         } catch (err){
             console.error(err)
         }
+
+        return newSessionID 
     }
 
     async getASpecificSession(sessionID){
@@ -107,8 +108,11 @@ class CreateCourse extends React.Component {
     }
 
     arrangeSessionsByOrder(sessions, draggedSessionID){
-        let tempArr = new Array(sessions.length)
-        sessions.forEach(session => tempArr[session.order_number - 1] = session)
+        let tempArr = new Array()
+        //be careful if an element is empty
+        for (let i = 0; i<sessions.length; i++)
+            tempArr.push({})
+        sessions.forEach(session => tempArr[session.order_number - 1] = session )
 
         //added mini component
         for (let i =0; i < tempArr.length; i++){
@@ -129,14 +133,16 @@ class CreateCourse extends React.Component {
 
         }
 
+        console.log('tempArr', tempArr)
+
         this.setState({sessions: tempArr})
     }
 
     async getSessions(){
         const courseID = this.props.match.params.courseID
-        try {
+            try {
             const res = await axios.get(`${API_URL}/session/course/${courseID}`)
-            console.log('getting sessions')
+            console.log('getting sessions', res.data)
             //arrange sessions according to order_number
             if (res.data.length > 0){
                 this.arrangeSessionsByOrder(res.data)
@@ -166,13 +172,18 @@ class CreateCourse extends React.Component {
         return null
     }
 
-    async deleteSession(sessionID){
-        
+    async deleteSession(sessionID, curOrderNumber){
+        const { sessions } = this.state;
         const preSession = this.getPreSession(sessionID)
         console.log('preSession', preSession)
         try {
             const res = await axios.delete(`${API_URL}/session/${sessionID}`)
             console.log('res in deleting session', res.data)
+            
+            //reorder the sessions
+            this.reOrderSessions(sessions, curOrderNumber, -1)
+
+            //get sessions
             this.getSessions()
 
             //display the previous session
@@ -210,6 +221,42 @@ class CreateCourse extends React.Component {
         })
         //add session
         this.addSession(moduleID)
+    }
+
+    reOrderSessions(sessions, curOrderNumber, change){
+        const nextSessions = sessions.filter(session => session.order_number > curOrderNumber)
+        if (nextSessions.length > 0){
+            nextSessions.forEach((session,i) => {this.updateSession({order_number: session.order_number + change}, session.sessionID)}
+            )
+        }
+    }
+
+    async duplicateModule(moduleID, curOrderNumber){
+        const { sessions } = this.state
+        const session = {
+            courseID: this.props.match.params.courseID,
+            moduleID: moduleID,
+            order_number: curOrderNumber + 1
+        }
+        try {
+            const res = await axios.post(`${API_URL}/session`, session)
+            console.log('respond from posting a session in duplicate', res.data)
+            let newSessionID = parseInt(res.data.id);
+            //update order_number of the following sessions
+            this.reOrderSessions(sessions, curOrderNumber, 1)
+
+            //get session
+            this.getSessions()
+
+            //display session
+            this.displaySession(newSessionID, moduleID)
+
+            
+        } catch (err){
+            console.error(err)
+        }
+
+
     }
 
     async displaySession(sessionID, moduleID){
@@ -301,7 +348,10 @@ class CreateCourse extends React.Component {
     }
 
     render(){
+
         const { sessions, showModuleMenu, modules, componentToDisplay, isDragging, translation } = this.state;
+
+        console.log('sessions', sessions)
 
         return (
             <div className="create-container">
@@ -311,9 +361,14 @@ class CreateCourse extends React.Component {
                                                 <div className="session-wrapper">
                                                     <div className="icons">
                                                         <FontAwesomeIcon
+                                                            icon = {faClone}
+                                                            className="duplicate-icon"
+                                                            onClick={() => this.duplicateModule(session.moduleID, session.order_number)}
+                                                        />
+                                                        <FontAwesomeIcon
                                                             icon = {faTrashAlt}
                                                             className="delete-icon"
-                                                            onClick={() => this.deleteSession(session.sessionID)}
+                                                            onClick={() => this.deleteSession(session.sessionID, session.order_number)}
                                                         />
                                                     </div>
                                                     <div 
@@ -372,7 +427,7 @@ class CreateCourse extends React.Component {
 
 const mapStateToProps = state => {
     return {
-       state
+       sessions: state.courseReducer.sessions
     }
 }
 

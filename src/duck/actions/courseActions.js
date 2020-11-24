@@ -1,15 +1,13 @@
-import Axios from "axios";
+import axios from "axios";
 import { API_URL } from '../../apiConfig';
-export const CREATE_COURSE = 'CREATE_COURSE';
-export const CREATE_SESSION = 'CREATE_SESSION';
-export const ADD_MODULE = 'ADD_MODULE';
-export const GET_CONTENT_SUCCESS = 'GET_CONTENT_SUCCESS';
-export const GET_CONTENT_FAILURE = 'GET_CONTENT_FAILURE';
-export const UPDATE_CONTENT_SUCCESS = 'UPDATE_CONTENT_SUCCESS';
-export const UPDATE_CONTENT_FAILURE = 'UPDATE_CONTENT_FAILURE';
-export const ADD_CONTENT_SUCCESS = 'ADD_CONTENT_SUCCESS';
-export const ADD_CONTENT_FAILURE = 'ADD_CONTENT_FAILURE';
+import DragDropMini from '../../modules/dragdrop1/mini/dragdrop1.mini';
+import QuizMini from '../../modules/quiz/mini/quiz.mini';
 export const PUBLISH_COURSE = 'PUBLISH_COURSE';
+export const GET_SESSIONS_FAILURE = 'GET_SESSIONS_FAILURE';
+export const GET_MODULES_SUCCESS = 'GET_MODULE_SUCCESS';
+export const GET_MODULES_FAILURE = 'GET_MODULE_FAILURE';
+export const ARRANGE_SESSION_BY_ORDER = 'ARRANGE_SESSIONS_BY_ORDER';
+export const GET_SESSIONS_SUCCESS = 'GET_SESSIONS_SUCCESS'
 
 export const publishCourse = isPublished => {
     return {
@@ -18,34 +16,26 @@ export const publishCourse = isPublished => {
     }
 }
 
-export const createCourse = () => {
-
+export const createCourse = (course, history) => {
+    return async dispatch => {
+        try {
+            const res = await axios.post(`${API_URL}/course`, course)
+            console.log('res in creating page', res.data)
+            const courseID = res.data.id
+            history.push(`/course/${courseID}`)
+        } catch (err){
+            console.error(err)
+        }
+    }
 }
+
 
 export const createSession = () => {
 
 }
 
 export const deleteSession = () => {
-    
+
 }
 
-
-export const getContent = (sessionID, moduleID) => {
-    return async dispatch => {
-        try {
-            const res = await Axios.get(`${API_URL}/session/content/${sessionID}/${moduleID}`)
-            console.log('res in getting for the session', res.data)
-            dispatch({
-                type: GET_CONTENT_SUCCESS,
-                payload: res.data
-            })
-        } catch (err){
-            dispatch({
-                type: GET_CONTENT_FAILURE,
-                payload: err
-            })
-        }
-    }
-}
 

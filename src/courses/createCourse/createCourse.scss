@@ -26,11 +26,16 @@
                 justify-content: flex-end;
                 margin-bottom: 10px;
 
-                .delete-icon {
-                    color: grey
+                .duplicate-icon {
+                    margin-bottom: 10px;
                 }
 
-                .delete-icon:hover {
+                .delete-icon, .duplicate-icon {
+                    color: grey;
+                    font-size: 12px;
+                }
+
+                .delete-icon:hover, .duplicate-icon:hover {
                     color: black;
                     cursor: pointer;
                 }

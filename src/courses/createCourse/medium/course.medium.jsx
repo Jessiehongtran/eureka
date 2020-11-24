@@ -1,9 +1,12 @@
 import React from 'react';
-import axios from 'axios';
-import { API_URL } from '../../../apiConfig';
+// import axios from 'axios';
+// import { API_URL } from '../../../apiConfig';
+import { connect } from 'react-redux';
 import './course.medium.scss';
+import { createCourse } from '../../../duck/actions/courseActions';
 
-export default class courseMedium extends React.Component {
+
+class courseMedium extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -24,14 +27,7 @@ export default class courseMedium extends React.Component {
             description: description,
             userID: 1
         };
-        try {
-            const res = await axios.post(`${API_URL}/course`, course)
-            console.log('res in creating page', res.data)
-            const courseID = res.data.id
-            this.props.history.push(`/course/${courseID}`)
-        } catch (err){
-            console.error(err)
-        }
+        this.props.createCourse(course, this.props.history)
     }
 
     render(){
@@ -61,3 +57,11 @@ export default class courseMedium extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+       state
+    }
+}
+
+export default connect(mapStateToProps, { createCourse })(courseMedium);
