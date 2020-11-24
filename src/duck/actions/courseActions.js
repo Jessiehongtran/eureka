@@ -26,6 +26,10 @@ export const createSession = () => {
 
 }
 
+export const deleteSession = () => {
+    
+}
+
 
 export const getContent = (sessionID, moduleID) => {
     return async dispatch => {

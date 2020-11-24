@@ -10,11 +10,13 @@ import Type from '../../modules/type/type';
 import Video from '../../modules/video/video';
 import Slider from '../../modules/slider/slider';
 import WordRain from '../../modules/wordRain/wordRain';
-import QuizMini from '../../modules/quiz/quiz.mini';
+import QuizMini from '../../modules/quiz/mini/quiz.mini';
 import { publishCourse } from '../../duck/actions/courseActions';
 import { getQuestion, getChoices } from '../../duck/actions/quizActions';
 import { getHeader, getCategory } from '../../duck/actions/dragdropActions';
 import DragDropMini from '../../modules/dragdrop1/mini/dragdrop1.mini';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 class CreateCourse extends React.Component {
     constructor(props){
@@ -45,8 +47,6 @@ class CreateCourse extends React.Component {
         this.getASpecificSession = this.getASpecificSession.bind(this);
         this.arrangeSessionsByOrder = this.arrangeSessionsByOrder.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
-        this.handleMouseUp = this.handleMouseUp.bind(this);
-        this.handleMouseMove = this.handleMouseMove.bind(this);
     }
 
     componentDidMount(){
@@ -106,10 +106,11 @@ class CreateCourse extends React.Component {
         return session
     }
 
-    arrangeSessionsByOrder(sessions){
+    arrangeSessionsByOrder(sessions, draggedSessionID){
         let tempArr = new Array(sessions.length)
         sessions.forEach(session => tempArr[session.order_number - 1] = session)
 
+        //added mini component
         for (let i =0; i < tempArr.length; i++){
             if (tempArr[i].moduleID === 1){
                 tempArr[i].miniComponent = <DragDropMini/>
@@ -120,6 +121,12 @@ class CreateCourse extends React.Component {
             else {
                 tempArr[i].miniComponent = <></>
             }
+
+            //change color back to white
+            if (tempArr[i].sessionID === draggedSessionID){
+                tempArr[i].bgcolor = 'white'
+            }
+
         }
 
         this.setState({sessions: tempArr})
@@ -129,6 +136,7 @@ class CreateCourse extends React.Component {
         const courseID = this.props.match.params.courseID
         try {
             const res = await axios.get(`${API_URL}/session/course/${courseID}`)
+            console.log('getting sessions')
             //arrange sessions according to order_number
             if (res.data.length > 0){
                 this.arrangeSessionsByOrder(res.data)
@@ -143,7 +151,33 @@ class CreateCourse extends React.Component {
         try {
             const res = await axios.patch(`${API_URL}/session/${sessionID}`, change)
             console.log('res in updating session', res.data)
-            // this.getSessions()
+        } catch (err){
+            console.error(err)
+        }
+    }
+
+    getPreSession(sessionID){
+        const { sessions } = this.state;
+        for (let i = 0; i < sessions.length-1; i++){
+            if (sessions[i+1].sessionID === sessionID){
+                return sessions[i]
+            }
+        }
+        return null
+    }
+
+    async deleteSession(sessionID){
+        
+        const preSession = this.getPreSession(sessionID)
+        console.log('preSession', preSession)
+        try {
+            const res = await axios.delete(`${API_URL}/session/${sessionID}`)
+            console.log('res in deleting session', res.data)
+            this.getSessions()
+
+            //display the previous session
+            this.displaySession(preSession.sessionID, preSession.moduleID)
+
         } catch (err){
             console.error(err)
         }
@@ -212,32 +246,25 @@ class CreateCourse extends React.Component {
     }
 
     handleDragStart(e, sessionID){
-        console.log('drag start', sessionID)
         e.dataTransfer.setData('id', sessionID)
+        //change color
+        let { sessions } = this.state;
+        const draggedSession = sessions.filter(session => session.sessionID === sessionID)[0]
+        draggedSession.bgcolor = "#ECECEC"
+        this.setState({sessions: sessions})
     }
 
     handleDragOver(e, sessionID){
         e.preventDefault()
         const { origin } = this.state;
         this.setState({translation: {x: e.clientX - origin.x, y: e.clientY - origin.y}})
-        console.log('drag over', sessionID, e.clientX, e.clientY)
     }
 
     handleMouseDown({clientX, clientY}){
-        console.log('mouse down', clientX, clientY)
         this.setState({
             isDragging: true,
             origin: {x: clientX, y: clientY}
         })
-    }
-
-    handleMouseMove(e){
-        console.log('mouse move', e)
-    }
-
-    handleMouseUp(){
-        console.log('mouse up')
-        this.setState({isDragging: false})
     }
 
     swapSessionOrder(arriveSessionID, departSessionID, sessions){
@@ -269,40 +296,46 @@ class CreateCourse extends React.Component {
     handleDrop(e, sessionID){
         const departInd = parseInt(e.dataTransfer.getData('id'))
         const arriveInd = sessionID
-        console.log('drop',arriveInd, departInd)
         const newSessions = this.swapSessionOrder(arriveInd, departInd, this.state.sessions)
-        console.log('newSessions', newSessions)
-        this.arrangeSessionsByOrder(newSessions)
-        
+        this.arrangeSessionsByOrder(newSessions, departInd )
     }
 
     render(){
         const { sessions, showModuleMenu, modules, componentToDisplay, isDragging, translation } = this.state;
 
-        console.log('sessions', sessions)
-
         return (
             <div className="create-container">
                 <div className="content-list">
                     {sessions.length > 0
-                    ? sessions.map((session, ind) => <div 
-                                                    key={session.sessionID}
-                                                    className="each-session"
-                                                    onClick={() => this.displaySession(session.sessionID, session.moduleID)}
-                                                    draggable
-                                                    onDragStart={e => this.handleDragStart(e, session.sessionID)}
-                                                    onDragOver ={e => this.handleDragOver(e, session.sessionID)}
-                                                    onDrop={e => this.handleDrop(e, session.sessionID)}
-                                                    onMouseDown={this.handleMouseDown}
-                                                    style={{
-                                                        cursor: isDragging ? '-webkit-grabbing': '-webkit-grab',
-                                                        zIndex: isDragging ? 2: 1,
-                                                        transition: isDragging ? 'none' : 'transform 500ms',
-                                                        transform: `translate(${translation.x})px, ${translation.y}px)`
-                                                    }}
-                                                >   
-                                                    {session.module_name}
-                                                    {session.miniComponent}
+                    ? sessions.map((session, ind) => 
+                                                <div className="session-wrapper">
+                                                    <div className="icons">
+                                                        <FontAwesomeIcon
+                                                            icon = {faTrashAlt}
+                                                            className="delete-icon"
+                                                            onClick={() => this.deleteSession(session.sessionID)}
+                                                        />
+                                                    </div>
+                                                    <div 
+                                                        key={session.sessionID}
+                                                        className="each-session"
+                                                        onClick={() => this.displaySession(session.sessionID, session.moduleID)}
+                                                        draggable
+                                                        onDragStart={e => this.handleDragStart(e, session.sessionID)}
+                                                        onDragOver ={e => this.handleDragOver(e, session.sessionID)}
+                                                        onDrop={e => this.handleDrop(e, session.sessionID)}
+                                                        onMouseDown={this.handleMouseDown}
+                                                        style={{
+                                                            cursor: isDragging ? '-webkit-grabbing': '-webkit-grab',
+                                                            zIndex: isDragging ? 2: 1,
+                                                            transition: isDragging ? 'none' : 'transform 500ms',
+                                                            transform: `translate(${translation.x})px, ${translation.y}px)`,
+                                                            backgroundColor: isDragging && session.bgcolor ? session.bgcolor : 'white'
+                                                        }}
+                                                    >   
+                                                        {session.module_name}
+                                                        {session.miniComponent}
+                                                    </div>
                                                 </div>)
                     : null}
                     <button 

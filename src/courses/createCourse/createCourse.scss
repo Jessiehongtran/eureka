@@ -13,16 +13,39 @@
         min-height: 100vh;
         padding: 10px;
 
-        .content-shrink, .each-session {
-            border: 1px solid grey;
-            width: 99%;
-            min-height: 120px;
-            margin-bottom: 10px;
+        .session-wrapper {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background-color: white;  
-                    
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 99%;
+
+            .icons {
+                width: 10%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                margin-bottom: 10px;
+
+                .delete-icon {
+                    color: grey
+                }
+
+                .delete-icon:hover {
+                    color: black;
+                    cursor: pointer;
+                }
+            }
+
+            .content-shrink, .each-session {
+                border: 1px solid grey;
+                width: 90%;
+                min-height: 120px;
+                margin-bottom: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                background-color: blue;
+            }
         }
 
         .add-btn {
