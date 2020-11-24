@@ -19,8 +19,7 @@ class DragDropMini extends React.Component {
                     type="text"
                     placeholder="Type a header..." 
                     className="header"
-                    value={header && header.text ? header.text : ""}
-                    diabled
+                    disabled
                 />
                 <div className="ans">
                     <input

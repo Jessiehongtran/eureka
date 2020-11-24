@@ -12,16 +12,19 @@
             text-align: center;
         }
 
+        .ques-input:focus {
+            outline: none;
+        }
+
         .answers {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             
-
             .each {
                 width: 35%;
-                margin: 5px 10px 5px 0;
+                margin: 5px 0px 5px 0;
                 // background-color: yellow;
                 min-height: 14px;
                 display: flex;
@@ -29,7 +32,7 @@
                 
                 
                 .ans-input {
-                    width: 100%;
+                    width: 95%;
                     border: 1px solid silver;
                     min-height: 10px;
                     margin: 0;

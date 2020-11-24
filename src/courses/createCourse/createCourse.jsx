@@ -26,12 +26,12 @@ class CreateCourse extends React.Component {
             activeSessionInd: 0,
             clickedModuleID: 0,
             componentToDisplay: <></>,
-            miniComponent: <></>,
             clickedY: 0,
             selectedSession: {},
             displayDragDrop: false,
             displayQuiz: false,
-            curSessionID: 0
+            curSessionID: 0,
+            isDragging: false
         }
 
         this.getSessions = this.getSessions.bind(this);
@@ -42,6 +42,8 @@ class CreateCourse extends React.Component {
         this.displaySession = this.displaySession.bind(this);
         this.getASpecificSession = this.getASpecificSession.bind(this);
         this.arrangeSessionsByOrder = this.arrangeSessionsByOrder.bind(this);
+        this.handleMouseDown = this.handleMouseDown.bind(this);
+        this.handleMouseUp = this.handleMouseUp.bind(this);
     }
 
     componentDidMount(){
@@ -59,7 +61,14 @@ class CreateCourse extends React.Component {
                 }
         }.bind(this), 1000)
         
+        if (this.state.isDragging){
+            window.addEventListener('mouseup', this.handleMouseUp)
+        } else {
+            window.removeEventListener('mouseup', this.handleMouseUp)
+        }
     }
+
+
 
 
     async addSession(moduleID){
@@ -219,6 +228,14 @@ class CreateCourse extends React.Component {
         // this.setState({sessions: sessions})
     }
 
+    handleMouseDown(){
+        this.setState({isDragging: true})
+    }
+
+    handleMouseUp(){
+        this.setState({isDragging: false})
+    }
+
     swapSessionOrder(arriveSessionID, departSessionID, sessions){
         let deSession, deSessionInd, arrSession, arrSessionInd
         for (let i = 0; i < sessions.length; i++){
@@ -256,7 +273,7 @@ class CreateCourse extends React.Component {
     }
 
     render(){
-        const { sessions, showModuleMenu, modules, componentToDisplay, miniComponent } = this.state;
+        const { sessions, showModuleMenu, modules, componentToDisplay, isDragging } = this.state;
 
         console.log('sessions', sessions)
 
@@ -273,6 +290,12 @@ class CreateCourse extends React.Component {
                                                     onDragOver ={e => this.handleDragOver(e, session.sessionID)}
                                                     onDragEnter={e => this.handleDragEnter(e, ind)}
                                                     onDrop={e => this.handleDrop(e, session.sessionID)}
+                                                    onMouseDown={this.handleMouseDown}
+                                                    style={{
+                                                        cursor: isDragging ? '-webkit-grabbing': '-webkit-grab',
+                                                        zIndex: isDragging ? 2: 1,
+                                                        transition: isDragging ? 'none' : 'transform 500ms',
+                                                    }}
                                                 >   
                                                     {session.module_name}
                                                     {session.miniComponent}

@@ -22,7 +22,7 @@ class QuizMini extends React.Component {
                         type="text"
                         className="ques-input"
                         placeholder="Click to type a question"
-                        
+                        disabled
                     />
                     <div className="answers">
                         {choices.map(choice => 
@@ -30,6 +30,7 @@ class QuizMini extends React.Component {
                                 <input
                                     type="text"
                                     className="ans-input"
+                                    disabled
                                 />    
                                 {choice.isCorrect
                                 ? <div  className="check-ans">
