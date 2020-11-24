@@ -84,11 +84,13 @@ class CreateCourse extends React.Component {
             const newSessionID = parseInt(res.data.id);
             console.log('newSessionID', newSessionID)
 
-            //display session
-            this.displaySession(newSessionID, res.data.moduleID)
-
             //get session
             this.getSessions()
+
+            //display session
+            this.displaySession(newSessionID, moduleID)
+
+            
         } catch (err){
             console.error(err)
         }
