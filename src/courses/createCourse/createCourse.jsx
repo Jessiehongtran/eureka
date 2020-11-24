@@ -31,7 +31,9 @@ class CreateCourse extends React.Component {
             displayDragDrop: false,
             displayQuiz: false,
             curSessionID: 0,
-            isDragging: false
+            isDragging: false,
+            origin: { x: 0, y: 0},
+            translation: { x: 0, y: 0}
         }
 
         this.getSessions = this.getSessions.bind(this);
@@ -44,6 +46,7 @@ class CreateCourse extends React.Component {
         this.arrangeSessionsByOrder = this.arrangeSessionsByOrder.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseUp = this.handleMouseUp.bind(this);
+        this.handleMouseMove = this.handleMouseMove.bind(this);
     }
 
     componentDidMount(){
@@ -61,11 +64,6 @@ class CreateCourse extends React.Component {
                 }
         }.bind(this), 1000)
         
-        if (this.state.isDragging){
-            window.addEventListener('mouseup', this.handleMouseUp)
-        } else {
-            window.removeEventListener('mouseup', this.handleMouseUp)
-        }
     }
 
 
@@ -220,21 +218,25 @@ class CreateCourse extends React.Component {
 
     handleDragOver(e, sessionID){
         e.preventDefault()
-        console.log('drag over', sessionID)
+        const { origin } = this.state;
+        this.setState({translation: {x: e.clientX - origin.x, y: e.clientY - origin.y}})
+        console.log('drag over', sessionID, e.clientX, e.clientY)
     }
 
-    handleDragEnter(e, ind){
-        //to add a session there 
-        // let { sessions } = this.state;
-        // sessions.splice(ind + 1, 0, {sessionID: 0})
-        // this.setState({sessions: sessions})
+    handleMouseDown({clientX, clientY}){
+        console.log('mouse down', clientX, clientY)
+        this.setState({
+            isDragging: true,
+            origin: {x: clientX, y: clientY}
+        })
     }
 
-    handleMouseDown(){
-        this.setState({isDragging: true})
+    handleMouseMove(e){
+        console.log('mouse move', e)
     }
 
     handleMouseUp(){
+        console.log('mouse up')
         this.setState({isDragging: false})
     }
 
@@ -275,7 +277,7 @@ class CreateCourse extends React.Component {
     }
 
     render(){
-        const { sessions, showModuleMenu, modules, componentToDisplay, isDragging } = this.state;
+        const { sessions, showModuleMenu, modules, componentToDisplay, isDragging, translation } = this.state;
 
         console.log('sessions', sessions)
 
@@ -290,13 +292,13 @@ class CreateCourse extends React.Component {
                                                     draggable
                                                     onDragStart={e => this.handleDragStart(e, session.sessionID)}
                                                     onDragOver ={e => this.handleDragOver(e, session.sessionID)}
-                                                    onDragEnter={e => this.handleDragEnter(e, ind)}
                                                     onDrop={e => this.handleDrop(e, session.sessionID)}
                                                     onMouseDown={this.handleMouseDown}
                                                     style={{
                                                         cursor: isDragging ? '-webkit-grabbing': '-webkit-grab',
                                                         zIndex: isDragging ? 2: 1,
                                                         transition: isDragging ? 'none' : 'transform 500ms',
+                                                        transform: `translate(${translation.x})px, ${translation.y}px)`
                                                     }}
                                                 >   
                                                     {session.module_name}
