@@ -4,7 +4,6 @@ const initialState = {
     isPublished: false,
     courseID: 0,
     sessions: [],
-
 }
 
 export const courseReducer = (state=initialState, action) => {

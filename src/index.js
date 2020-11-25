@@ -2,10 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+// import { store } from './duck/store';
 import { Provider } from 'react-redux';
-import { store } from './duck/store';
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './duck/reducers';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
+
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 ReactDOM.render(
   <React.StrictMode>

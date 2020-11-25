@@ -1,6 +1,8 @@
 import React from 'react';
 import './quiz.mini.scss';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-regular-svg-icons';
 
 class QuizMini extends React.Component {
     constructor(props){
@@ -24,6 +26,12 @@ class QuizMini extends React.Component {
                         placeholder="Click to type a question"
                         disabled
                     />
+                    <div className="image">
+                        <FontAwesomeIcon
+                            icon={ faImage }
+                            className="image-icon"
+                        />
+                    </div>
                     <div className="answers">
                         {choices.map(choice => 
                             <div className="each" key={choice.id}>

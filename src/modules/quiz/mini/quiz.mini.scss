@@ -5,15 +5,34 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-bottom: 10px;
 
         .ques-input {
             border: none;
             width: 90%;
             text-align: center;
+            font-size: 12px;
+            margin-bottom: 3px;
         }
 
         .ques-input:focus {
             outline: none;
+        }
+
+        .image {
+            height: 30px;
+            width: 35%;
+            border: 1px dotted grey;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+
+            .image-icon {
+                font-size: 22px;
+                color: silver
+            }
         }
 
         .answers {
@@ -24,9 +43,9 @@
             
             .each {
                 width: 35%;
-                margin: 5px 0px 5px 0;
+                margin: 2px 0px 2px 0;
                 // background-color: yellow;
-                min-height: 14px;
+                max-height: 12px;
                 display: flex;
                 align-items: center;
                 
@@ -34,7 +53,7 @@
                 .ans-input {
                     width: 95%;
                     border: 1px solid silver;
-                    min-height: 10px;
+                    min-height: 8px;
                     margin: 0;
                     -moz-box-sizing: border-box; 
                     -webkit-box-sizing: border-box; 

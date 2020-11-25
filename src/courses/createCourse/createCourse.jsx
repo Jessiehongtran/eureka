@@ -14,7 +14,7 @@ import QuizMini from '../../modules/quiz/mini/quiz.mini';
 import DragDropMini from '../../modules/dragdrop1/mini/dragdrop1.mini';
 import VideoMini from '../../modules/video/mini/video.mini';
 import { publishCourse } from '../../duck/actions/courseActions';
-import { getQuestion, getChoices } from '../../duck/actions/quizActions';
+import { getQuestion, getChoices, getImage } from '../../duck/actions/quizActions';
 import { getHeader, getCategory } from '../../duck/actions/dragdropActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
@@ -279,6 +279,7 @@ class CreateCourse extends React.Component {
             })
             this.props.getQuestion(sessionID)
             this.props.getChoices(sessionID)
+            this.props.getImage(sessionID)
         } 
         else if (moduleID === 4){
             this.setState({ componentToDisplay: <Slider sessionID={sessionID} />})
@@ -433,4 +434,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices, getHeader, getCategory })(CreateCourse);
+export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices, getHeader, getCategory, getImage })(CreateCourse);

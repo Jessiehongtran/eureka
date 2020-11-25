@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 import { API_URL } from '../../apiConfig';
 export const GET_QUESTION_SUCCESS = 'GET_QUESTION_SUCCESS';
 export const GET_QUESTION_FAILURE = 'GET_QUESTION_FAILURE';
@@ -15,11 +15,17 @@ export const CHANGE_CHOICE = 'CHANGE_CHOICE';
 export const UPDATE_CHOICE_FAILURE = 'UPDATE_CHOICE_FAILURE';
 export const POST_CHOICE_FAILURE = 'POST_CHOICE_FAILURE';
 export const CHANGE_CHOICE_CORRECT = 'CHANGE_CHOICE_CORRECT';
+export const GET_IMAGE_SUCCESS = 'GET_IMAGE_SUCCESS';
+export const GET_IMAGE_EMPTY = 'GET_IMAGE_EMPTY';
+export const GET_IMAGE_FAILURE = 'GET_IMAGE_FAILURE';
+export const REMOVE_IMAGE_SUCCESS = 'REMOVE_IMAGE_SUCCESS';
+export const UPDATE_UPLOAD_STATUS = 'UPDATE_UPLOAD_STATUS';
+export const POST_IMAGE_SUCCESS = 'POST_IMAGE_SUCCESS';
 
 export const getQuestion = (sessionID) => {
     return async dispatch => {
         try {
-            const res = await Axios.get(`${API_URL}/question/session/${sessionID}`)
+            const res = await axios.get(`${API_URL}/question/session/${sessionID}`)
             console.log('res in getting question', res.data)
             if (res.data){
                 dispatch({
@@ -56,7 +62,7 @@ export const changeQuestion = (changedQuestion) => {
 export const postQuestion = (question) => {
     return async dispatch => {
         try {
-            const res = await Axios.post(`${API_URL}/question`, question)
+            const res = await axios.post(`${API_URL}/question`, question)
             console.log('res in posting question', res.data)
             
         } catch (err){
@@ -71,7 +77,7 @@ export const postQuestion = (question) => {
 export const updateQuestion = (updatedQuestion) => {
     return async dispatch => {
         try {
-            const res = await Axios.patch(`${API_URL}/question/${updatedQuestion.id}`, {
+            const res = await axios.patch(`${API_URL}/question/${updatedQuestion.id}`, {
                 question_text: updatedQuestion.question_text
             })
             console.log('res in updating question', res.data)
@@ -89,7 +95,7 @@ export const updateQuestion = (updatedQuestion) => {
 export const getChoices = (sessionID) => {
     return async dispatch => {
         try {
-            const res = await Axios.get(`${API_URL}/choice/session/${sessionID}`)
+            const res = await axios.get(`${API_URL}/choice/session/${sessionID}`)
             if (res.data.length > 0){
                 let choices = res.data;
                 const original_length = choices.length;
@@ -107,9 +113,7 @@ export const getChoices = (sessionID) => {
                         i += 1
                         
                     }
-                }
-
-                
+                }                
                 dispatch({
                     type: GET_ANSWERS_SUCCESS,
                     payload: choices
@@ -156,7 +160,7 @@ export const getChoices = (sessionID) => {
 export const postChoice = newChoice => {
     return async dispatch => {
         try {
-            const res = await Axios.post(`${API_URL}/choice`, newChoice)
+            const res = await axios.post(`${API_URL}/choice`, newChoice)
             console.log('res in posting choice', res.data)
             
         } catch (err){
@@ -185,7 +189,7 @@ export const changeChoiceCorrect = choiceToUpdate => {
 export const updateChoice = updatedChoice => {
     return async dispatch => {
         try {
-            const res = await Axios.patch(`${API_URL}/choice/${updatedChoice.id}`, {
+            const res = await axios.patch(`${API_URL}/choice/${updatedChoice.id}`, {
                 choice_text: updatedChoice.choice_text
             })
             console.log('res in updating choice', res.data)
@@ -200,4 +204,89 @@ export const updateChoice = updatedChoice => {
     }
 }
 
+export const getImage = (sessionID) => {
+    return async dispatch => {
+        try {
+            const res = await axios.get(`${API_URL}/image/session/${sessionID}`)
+            console.log('res in getting image', res.data)
+            if (res.data.length > 0){
+                dispatch({
+                    type: GET_IMAGE_SUCCESS,
+                    payload: {
+                        image: res.data[0],
+                        image_uploading: false,
+                        showUploadFunc: false
+                    }
+                })
+            } else {
+                dispatch({
+                    type: GET_IMAGE_EMPTY,
+                    payload: {
+                        image: {
+                            id: 0,
+                            image_url: "",
+                            sessionID: 0
+                        },
+                        image_uploading: false,
+                        showUploadFunc: true
+                    }
+                })
+            }
+        } catch (err){
+            dispatch({
+                type: GET_IMAGE_FAILURE,
+                payload: err
+            })
+        }
+    }
+}
+
+export const postImage = (imageData, sessionID) => {
+    console.log('imageData', imageData, 'sessionID', sessionID )
+    return async dispatch => {
+        try {
+            const res = await axios.post(`${API_URL}/image/session/${sessionID}`, imageData, {
+                                        headers: {
+                                        'Content-Type': 'multipart/form-data'
+                                        }
+                                    })
+            console.log('res in uploading image', res.data)
+            //dispatch post success?
+            dispatch({
+                type: POST_IMAGE_SUCCESS,
+                payload: {
+                    image_url: res.data.uploaded_img, 
+                    image_uploading: false
+                }
+            })
+        } catch (err){
+            console.error(err)
+            //dispatch err
+        }
+    }
+}
+
+export const removeImage = (imageID) => {
+    return async dispatch => {
+        try {
+            const res = await axios.delete(`${API_URL}/image/${imageID}`)
+            console.log('res in deleting image', res.data)
+            dispatch({
+                type: REMOVE_IMAGE_SUCCESS,
+                payload: {
+                    showUploadFunc: true
+                }
+            })
+        } catch (err){
+            console.error(err)
+        }
+    }
+}
+
+export const updateUploadStatus = (status) => {
+    return {
+        type: UPDATE_UPLOAD_STATUS,
+        payload: status
+    }
+}
 

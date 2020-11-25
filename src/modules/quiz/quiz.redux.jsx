@@ -1,7 +1,9 @@
 import React from 'react';
 import './quiz.scss';
 import { connect } from 'react-redux';
-import { changeQuestion, updateQuestion, changeChoiceCorrect, postQuestion, updateChoice, postChoice, changeChoice } from '../../duck/actions/quizActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { changeQuestion, updateQuestion, changeChoiceCorrect, postQuestion, updateChoice, postChoice, changeChoice, updateUploadStatus, postImage, removeImage } from '../../duck/actions/quizActions';
 
 class Quiz extends React.Component {
     constructor(props){
@@ -9,6 +11,7 @@ class Quiz extends React.Component {
         this.state = {
             showUploadFunc: true
         }
+        this.handleChangeImage = this.handleChangeImage.bind(this)
     }
 
     handleChangeQuestion(e, questionID){
@@ -77,8 +80,21 @@ class Quiz extends React.Component {
         }
     }
 
+    handleChangeImage(e){
+        const img = e.target.files[0]
+        this.props.updateUploadStatus({
+            showUploadFunc: false,
+            image_uploading: true
+        })
+
+        const formData = new FormData()
+        formData.append(0, img)
+        this.props.postImage(formData, this.props.sessionID)
+    }
+
     render(){
-        const { question, choices } = this.props;
+
+        const { question, choices, image, showUploadFunc, image_uploading } = this.props;
 
         return (
             <div className="quiz">
@@ -92,6 +108,32 @@ class Quiz extends React.Component {
                         onBlur= {e => this.handleBlurQuestion(e, question.id)}
                         // disabled={isPublished ? true : false}
                     />
+                    {!showUploadFunc 
+                    ? !image_uploading
+                      ? <div className="image-container">
+                            <div className="delete-icon">
+                                <FontAwesomeIcon
+                                    icon = {faTimesCircle}
+                                    onClick={() => this.props.removeImage(image.id)}
+                                />
+                            </div>
+                            <img 
+                                src={image.image_url} 
+                            className="image-frame" />
+                        </div>
+                      : <p>loading the image...</p>
+                    : <div className="image">
+                        <p>Image goes here</p>
+                        <label className="upload">
+                            <input 
+                                type="file"
+                                className="upload-input"
+                                onChange={this.handleChangeImage}
+                            />
+                            Upload image
+                        </label>
+                    </div>
+                    }
                     <div className="answers">
                         {choices.map(choice => 
                             <div className="each" key={choice.id}>
@@ -121,13 +163,16 @@ class Quiz extends React.Component {
 }
 
 const mapStateToProps = state => {
-    console.log('state', state)
+    console.log('state in quiz', state)
     return {
         sessionID: state.quizReducer.sessionID,
         question: state.quizReducer.question,
-        choices: state.quizReducer.choices
+        choices: state.quizReducer.choices,
+        image: state.quizReducer.image,
+        showUploadFunc: state.quizReducer.showUploadFunc,
+        image_uploading: state.quizReducer.image_uploading
     }
 }
 
 
-export default connect(mapStateToProps, {updateQuestion, changeChoiceCorrect, changeChoice, postQuestion, changeQuestion, updateChoice, postChoice })(Quiz);
+export default connect(mapStateToProps, {updateQuestion, changeChoiceCorrect, changeChoice, postQuestion, changeQuestion, updateChoice, postChoice, updateUploadStatus, postImage, removeImage })(Quiz);
