@@ -25,24 +25,70 @@
 
     .upload {
         margin: 30px 0 30px 0;
-
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
         .video-upload {
+            width: 20%;
             font-family: 'Poppins', sans-serif;
             border: none;
             background-color: grey;
             border-radius: 4px;
             padding: 5px 8px 5px 8px;
             color: white;
-            
+            min-width: 150px;
+           
 
             input {
                 display: none
             }
+
+           
         }
+
+        .video-link {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           width: 100%;
+
+           .text {
+            font-family: 'Poppins', sans-serif;
+            border: none;
+            background-color: grey;
+            border-radius: 4px;
+            padding: 5px 8px 5px 8px;
+            color: white;
+            min-width: 150px;
+           }
+
+           .link-input {
+               min-height: 50px;
+               width: 80%;
+           }
+
+           
+        }
+
+        .change-btn {
+            margin-top: 20px;
+            font-family: 'Poppins', sans-serif;
+            border: none;
+            background-color: grey;
+            border-radius: 4px;
+            padding: 5px 8px 5px 8px;
+            color: white;
+        }
+    
     }
 
     .video-pre {
-        
+        width: 100%;
+
+        .video {
+            max-width: 100%;
+            
+        }
     }
 }
