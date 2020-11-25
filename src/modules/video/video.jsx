@@ -1,5 +1,19 @@
 import React from 'react';
-import './video.scss'
+import './video.scss';
+import axios from 'axios';
+import { API_URL } from '../../apiConfig';
+import S3FileUpload from 'react-s3';
+ 
+//Optional Import
+import { uploadFile } from 'react-s3';
+ 
+const config = {
+    bucketName: 'testampcreative',
+    region: 'us-east-2',
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_ACCESS_SECRET,
+}
+
 
 export default class Video extends React.Component {
     constructor(props){
@@ -21,12 +35,35 @@ export default class Video extends React.Component {
         this.handleReplaceVideo = this.handleReplaceVideo.bind(this)
     }
 
+    async postVideo(videoData){
+        try {
+            const res = await axios.post(`${API_URL}/video/session/${this.props.sessionID}`, videoData, {
+                                        headers: {
+                                        'Content-Type': 'multipart/form-data'
+                                        }
+                                    })
+            console.log('res in uploading video', res.data)
+        } catch (err){
+            console.error(err)
+        }
+    }
+
+    upload(file){
+        S3FileUpload
+            .uploadFile(file, config)
+            .then(data => console.log(data))
+            .catch(err => console.error(err))
+    }
+
     handleChangeVideo(e){
+        const video = e.target.files[0]
         this.setState({
-            video: e.target.files[0],
+            video: video,
             have_video: true,
             video_uploaded: true
         })
+        this.upload(video)
+    
 
     }
 
