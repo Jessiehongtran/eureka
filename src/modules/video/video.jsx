@@ -10,9 +10,11 @@ import { uploadFile } from 'react-s3';
 const config = {
     bucketName: 'testampcreative',
     region: 'us-east-2',
-    accessKeyId: process.env.S3_ACCESS_KEY,
-    secretAccessKey: process.env.S3_ACCESS_SECRET,
+    accessKeyId: 'AKIAJZARDZTJIOX4QZQA',
+    secretAccessKey: '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',
 }
+
+console.log('check ACCESS KEY', config)
 
 
 export default class Video extends React.Component {
@@ -37,32 +39,34 @@ export default class Video extends React.Component {
 
     async postVideo(videoData){
         try {
-            const res = await axios.post(`${API_URL}/video/session/${this.props.sessionID}`, videoData, {
+            const res = await axios.post(`${API_URL}/video/session/${this.props.sessionID}`, videoData, 
+                                    {
+                                    //     withCredentials: true,
                                         headers: {
                                         'Content-Type': 'multipart/form-data'
-                                        }
-                                    })
+                                            }
+                                    }
+                                )
             console.log('res in uploading video', res.data)
+            this.setState({ link: res.data.Location })
         } catch (err){
             console.error(err)
         }
     }
 
-    upload(file){
-        S3FileUpload
-            .uploadFile(file, config)
-            .then(data => console.log(data))
-            .catch(err => console.error(err))
-    }
 
     handleChangeVideo(e){
         const video = e.target.files[0]
         this.setState({
-            video: video,
+            // video: video,
             have_video: true,
             video_uploaded: true
         })
-        this.upload(video)
+        console.log('video', video)
+
+        const formData = new FormData()
+        formData.append('file', video)
+        this.postVideo(formData)
     
 
     }
