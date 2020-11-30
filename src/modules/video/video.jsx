@@ -28,13 +28,29 @@ export default class Video extends React.Component {
             video_uploaded: false,
             link_uploaded: false,
             show_link: false,
-            link: ""
+            link: "",
+            uploaded_link: ""
         }
         this.handleChangeVideo = this.handleChangeVideo.bind(this)
         this.saveHeader = this.saveHeader.bind(this)
         this.enterlink = this.enterlink.bind(this)
         this.handleChangeLink = this.handleChangeLink.bind(this)
         this.handleReplaceVideo = this.handleReplaceVideo.bind(this)
+        this.getVideo = this.getVideo.bind(this)
+    }
+
+    componentDidMount(){
+        this.getVideo()
+    }
+
+    async getVideo(){
+        try {
+            const res = await axios.get(`${API_URL}/video/session/${this.props.sessionID}`)
+            console.log('res in getting video', res.data)
+            this.setState({uploaded_link: res.data.video_url})
+        } catch (err){
+            console.error(err)
+        }
     }
 
     async postVideo(videoData){
@@ -48,7 +64,6 @@ export default class Video extends React.Component {
                                     }
                                 )
             console.log('res in uploading video', res.data)
-            this.setState({ link: res.data.Location })
         } catch (err){
             console.error(err)
         }
@@ -58,7 +73,7 @@ export default class Video extends React.Component {
     handleChangeVideo(e){
         const video = e.target.files[0]
         this.setState({
-            // video: video,
+            video: video,
             have_video: true,
             video_uploaded: true
         })
@@ -159,7 +174,7 @@ export default class Video extends React.Component {
                         className="video" 
                         width="760" 
                         height="515" 
-                        src= {video !== null? URL.createObjectURL(video) : link.length > 0 && this.isValidUrl(link) ? link.replace("watch?v=", "embed/") : ""} 
+                        src= {video !== null? URL.createObjectURL(video) : link.length > 0 && this.isValidUrl(link) ? link.replace("watch?v=", "embed/") : this.state.uploaded_link} 
                         frameBorder="0" 
                         allowFullScreen scrolling="no"></iframe>
                     
