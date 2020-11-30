@@ -263,35 +263,35 @@ class CreateCourse extends React.Component {
 
     }
 
-    async displaySession(sessionID, moduleID){
+    async displaySession(sessionID, moduleID, order_number){
         //get the component of the module and update the state componentToDisplay
         if (moduleID === 1){
-            this.setState({ componentToDisplay: <DragDrop1 sessionID={sessionID} />})
+            this.setState({ componentToDisplay: <DragDrop1 sessionID={sessionID} order_number={order_number} />})
             this.props.getHeader(sessionID)
             this.props.getCategory(sessionID)
         } 
         else if (moduleID === 2){
-            this.setState({ componentToDisplay: <DragDrop2 sessionID={sessionID} />})
+            this.setState({ componentToDisplay: <DragDrop2 sessionID={sessionID} order_number={order_number} />})
         } 
         else if (moduleID === 3){
             this.setState({ 
-                componentToDisplay: <Quiz sessionID={sessionID} />,
+                componentToDisplay: <Quiz sessionID={sessionID} order_number={order_number} />,
             })
             this.props.getQuestion(sessionID)
             this.props.getChoices(sessionID)
             this.props.getImage(sessionID)
         } 
         else if (moduleID === 4){
-            this.setState({ componentToDisplay: <Slider sessionID={sessionID} />})
+            this.setState({ componentToDisplay: <Slider sessionID={sessionID} order_number={order_number} />})
         } 
         else if (moduleID === 5){
-            this.setState({ componentToDisplay: <Type sessionID={sessionID} />})
+            this.setState({ componentToDisplay: <Type sessionID={sessionID} order_number={order_number} />})
         } 
         else if (moduleID === 6){
-            this.setState({ componentToDisplay: <Video sessionID={sessionID} />})
+            this.setState({ componentToDisplay: <Video sessionID={sessionID} order_number={order_number} />})
         } 
         else if (moduleID === 7){
-            this.setState({ componentToDisplay: <WordRain sessionID={sessionID} />})
+            this.setState({ componentToDisplay: <WordRain sessionID={sessionID} order_number={order_number} />})
         } 
 
        
@@ -363,6 +363,7 @@ class CreateCourse extends React.Component {
                     ? sessions.map((session, ind) => 
                                                 <div className="session-wrapper">
                                                     <div className="icons">
+                                                        <p style={{textAlign: 'left', fontSize: '12px', color: 'grey'}}>#{session.order_number}</p>
                                                         <FontAwesomeIcon
                                                             icon = {faClone}
                                                             className="duplicate-icon"
@@ -377,7 +378,7 @@ class CreateCourse extends React.Component {
                                                     <div 
                                                         key={session.sessionID}
                                                         className="each-session"
-                                                        onClick={() => this.displaySession(session.sessionID, session.moduleID)}
+                                                        onClick={() => this.displaySession(session.sessionID, session.moduleID, session.order_number)}
                                                         draggable
                                                         onDragStart={e => this.handleDragStart(e, session.sessionID)}
                                                         onDragOver ={e => this.handleDragOver(e, session.sessionID)}

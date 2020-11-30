@@ -135,6 +135,7 @@ export default class Video extends React.Component {
 
         return (
             <div className="video-container">
+                <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '25%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
                 <div className="header">
                     <input
                         type="text"

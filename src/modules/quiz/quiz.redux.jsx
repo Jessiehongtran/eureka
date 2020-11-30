@@ -96,8 +96,11 @@ class Quiz extends React.Component {
 
         const { question, choices, image, showUploadFunc, image_uploading } = this.props;
 
+        console.log('props in quiz', this.props)
+
         return (
             <div className="quiz">
+                <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '25%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
                 <div className="wrapper">
                     <input
                         type="text"
