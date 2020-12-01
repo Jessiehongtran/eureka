@@ -61,7 +61,7 @@ class CreateCourse extends React.Component {
             if (this.state.sessions.length > 0){
                     const firstSession = this.state.sessions[0]
                     const firstSessionID = firstSession.sessionID
-                    this.displaySession(firstSessionID, firstSession.moduleID)
+                    this.displaySession(firstSessionID, firstSession.moduleID, firstSession.order_number)
                 }
         }.bind(this), 1000)
         
@@ -86,7 +86,7 @@ class CreateCourse extends React.Component {
             this.getSessions()
 
             //display session
-            this.displaySession(newSessionID, moduleID)
+            this.displaySession(newSessionID, moduleID, session.order_number)
 
             
         } catch (err){

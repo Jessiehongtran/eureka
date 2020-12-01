@@ -51,6 +51,7 @@ export default class Type extends React.Component {
         return (
             <>
                 <div className="container">
+                <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '5%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
                     <div className="display-site">
                         <div className="text">
                             <p style={{fontSize: this.state.current_font+ 'px'}}>{text}</p>
