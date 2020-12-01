@@ -64,6 +64,8 @@ class CreateCourse extends React.Component {
                     this.displaySession(firstSessionID, firstSession.moduleID, firstSession.order_number)
                 }
         }.bind(this), 1000)
+        //turn publishCourse state to false
+        this.props.publishCourse(false, this.props.match.params.courseID)
         
     }
 
@@ -140,6 +142,7 @@ class CreateCourse extends React.Component {
         console.log('tempArr', tempArr)
 
         this.setState({sessions: tempArr})
+        return tempArr
     }
 
     async getSessions(){
@@ -405,7 +408,7 @@ class CreateCourse extends React.Component {
                     </button>
                     <button 
                         className="publish-btn"
-                        onClick={() => this.props.publishCourse(true)}
+                        onClick={() => this.props.publishCourse(true, this.props.match.params.courseID, this.props.history)}
                     >
                         Publish course
                     </button>

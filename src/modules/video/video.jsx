@@ -126,6 +126,10 @@ export default class Video extends React.Component {
         return true;
       }
 
+    handleChange(){
+        
+    }
+
 
     render(){
         console.log('videourl', this.state.videoUrl)
@@ -135,11 +139,15 @@ export default class Video extends React.Component {
 
         return (
             <div className="video-container">
-                <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '25%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
+                {this.props.order_number 
+                    ? <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '25%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
+                    : null
+                }
                 <div className="header">
                     <input
                         type="text"
                         placeholder="Header for video"
+                        onChange={this.handleChange}
                         onBlur= {this.saveHeader}
                     />
                 </div>

@@ -31,6 +31,32 @@ class InputDragDrop1 extends React.Component {
         this.addCategory = this.addCategory.bind(this)
     }
 
+    componentDidMount(){
+        if (this.props.sessionID && this.props.isPublished){
+            this.getHeader(this.props.sessionID)
+            this.getCategory(this.props.sessionID)
+        }
+    }
+
+    async getHeader(){
+        try {
+            const res = await axios.get(`${API_URL}/text/session/${this.props.sessionID}`)
+            this.setState({header: res.data[0]})
+            
+        } catch (err){
+           console.error(err)
+        }
+    }
+
+    async getCategory(){
+        try {
+            const res = await axios.get(`${API_URL}/category/session/${this.props.sessionID}`)
+            this.setState({category_list: res.data})
+        } catch (err){
+           console.error(err)
+        }
+    }
+
     updateChange(e){
         this.setState({change: e.target.value})
     }
@@ -72,7 +98,6 @@ class InputDragDrop1 extends React.Component {
             return change
         })
        
-
         if (new_after_change.length === 0){
             const after_changes = this.state.after_changes
             for (let i = 0; i< after_changes.length ; i++){
@@ -114,7 +139,7 @@ class InputDragDrop1 extends React.Component {
             this.props.updateHeader({text: e.target.value}, header.id)
         } else {
             const newHeader = {
-                text: e.target.valu,
+                text: e.target.value,
                 sessionID: this.props.sessionID
             }
             this.props.addHeader(newHeader)
@@ -148,7 +173,15 @@ class InputDragDrop1 extends React.Component {
 
     render(){
 
-        const { isPublished, header, category_list } = this.props;
+        const { isPublished, header } = this.props;
+
+        let category_list = []
+
+        if(isPublished) {
+            category_list = this.state.category_list 
+        } else {
+            category_list = this.props.category_list
+        }
 
         //now we don't know category name in advance, how can we classify
         let new_changes = {}
@@ -172,14 +205,17 @@ class InputDragDrop1 extends React.Component {
             }
        
         return (
-            <div className="container">
-                <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '5%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
+            <div className="dragdrop-container">
+                {this.props.order_number 
+                    ? <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '5%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
+                    : null
+                }
                 <div className="user-input">
                     <input
                         type="text"
                         placeholder="Type a header..." 
                         className="header"
-                        value={header && header.text ? header.text : ""}
+                        value={isPublished ? this.state.header.text : header && header.text ? header.text : ""}
                         onChange={this.handleChangeHeader}
                         onBlur={this.handleBlurHeader}
                         disabled={isPublished ? true : false}
@@ -206,7 +242,7 @@ class InputDragDrop1 extends React.Component {
                 }
                 </div>
                 <div className="classify">
-                    {category_list.length > 0
+                    { category_list.length > 0
                     ? category_list.map(cate => 
                         <div 
                             className="session" 

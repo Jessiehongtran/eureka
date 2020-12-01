@@ -118,7 +118,7 @@ export default class DragDrop1 extends React.Component {
             }
 
         return (
-            <div className="container">
+            <div className="dragdrop-container">
                 <div className="user-input">
                     <p className="ques">List all the changes you are navigating to then drag it to different categories</p>
                     <div className="ans">

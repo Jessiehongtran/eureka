@@ -18,6 +18,7 @@ import Video from './modules/video/video';
 import CreateCourse from './courses/createCourse/createCourse';
 import InputDragDrop1 from './modules/dragdrop1/forInput/dragdrop1.input';
 import CourseMedium from './courses/createCourse/medium/course.medium';
+import CourseDisplay from './courses/courseDisplay/courseDisplay';
 
 
 const App = () => {
@@ -58,6 +59,18 @@ const App = () => {
             return (
               <>
                 <CreateCourse {...props} />
+              </>
+            )
+          }
+        }
+      />
+      <Route 
+        exact path="/course/:courseID/view"
+        render = {
+          props => {
+            return (
+              <>
+                <CourseDisplay {...props} />
               </>
             )
           }

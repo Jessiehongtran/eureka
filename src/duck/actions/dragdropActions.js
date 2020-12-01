@@ -18,6 +18,7 @@ export const getHeader = (sessionID) => {
     return async dispatch => {
         try {
             const res = await axios.get(`${API_URL}/text/session/${sessionID}`)
+            console.log('res in getting header', res.data[0])
             dispatch({
                 type: GET_HEADER_SUCCESS,
                 payload: res.data[0]
