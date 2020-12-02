@@ -1,4 +1,4 @@
-import { GET_HEADER_SUCCESS, GET_HEADER_FAILURE, CHANGE_HEADER, ADD_HEADER_SUCCESS, ADD_HEADER_FAILURE, GET_CATEGORY_SUCCESS, CHANGE_CATEGORY, GET_CATEGORY_FAILURE, ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAILURE,  UPDATE_HEADER_FAILURE } from '../actions/dragdropActions';
+import { GET_HEADER_SUCCESS, GET_HEADER_FAILURE, GET_HEADER_EMPTY, CHANGE_HEADER, ADD_HEADER_SUCCESS, ADD_HEADER_FAILURE, GET_CATEGORY_SUCCESS, CHANGE_CATEGORY, GET_CATEGORY_FAILURE, ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAILURE,  UPDATE_HEADER_FAILURE } from '../actions/dragdropActions';
 
 const initialState = {
     header: {},
@@ -8,6 +8,11 @@ const initialState = {
 export const dragdropReducer = (state=initialState, action) => {
     switch(action.type){
         case GET_HEADER_SUCCESS:
+            return {
+                ...state,
+                header: action.payload
+            }
+        case GET_HEADER_EMPTY:
             return {
                 ...state,
                 header: action.payload

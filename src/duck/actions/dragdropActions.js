@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_URL } from '../../apiConfig';
 export const GET_HEADER_SUCCESS = 'GET_HEADER_SUCCESS';
 export const GET_HEADER_FAILURE = 'GET_HEADER_FAILURE';
+export const GET_HEADER_EMPTY = 'GET_HEADER_EMPTY';
 export const ADD_HEADER_SUCCESS = 'ADD_HEADER_SUCCESS';
 export const ADD_HEADER_FAILURE = 'ADD_HEADER_FAILURE';
 export const GET_CATEGORY_SUCCESS = 'GET_CATEGORY_SUCCESS';
@@ -18,11 +19,17 @@ export const getHeader = (sessionID) => {
     return async dispatch => {
         try {
             const res = await axios.get(`${API_URL}/text/session/${sessionID}`)
-            console.log('res in getting header', res.data[0])
-            dispatch({
-                type: GET_HEADER_SUCCESS,
-                payload: res.data[0]
-            })
+            if (res.data.length > 0){
+                dispatch({
+                    type: GET_HEADER_SUCCESS,
+                    payload: res.data[0]
+                })
+            } else {
+                dispatch({
+                    type: GET_HEADER_EMPTY,
+                    payload: {}
+                })
+            }
         } catch (err){
             dispatch({
                 type: GET_HEADER_FAILURE,

@@ -16,6 +16,7 @@ import VideoMini from '../../modules/video/mini/video.mini';
 import { publishCourse } from '../../duck/actions/courseActions';
 import { getQuestion, getChoices, getImage } from '../../duck/actions/quizActions';
 import { getHeader, getCategory } from '../../duck/actions/dragdropActions';
+import { getVideo } from '../../duck/actions/videoAction';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { faClone } from '@fortawesome/free-regular-svg-icons';
@@ -292,7 +293,8 @@ class CreateCourse extends React.Component {
         } 
         else if (moduleID === 6){
             this.setState({ componentToDisplay: <Video sessionID={sessionID} order_number={order_number} />})
-           
+            this.props.getHeader(sessionID)
+            this.props.getVideo(sessionID)
         } 
         else if (moduleID === 7){
             this.setState({ componentToDisplay: <WordRain sessionID={sessionID} order_number={order_number} />})
@@ -439,4 +441,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices, getHeader, getCategory, getImage })(CreateCourse);
+export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices, getHeader, getCategory, getImage, getVideo })(CreateCourse);

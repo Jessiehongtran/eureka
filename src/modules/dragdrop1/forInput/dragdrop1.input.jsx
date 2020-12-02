@@ -41,8 +41,9 @@ class InputDragDrop1 extends React.Component {
     async getHeader(){
         try {
             const res = await axios.get(`${API_URL}/text/session/${this.props.sessionID}`)
-            this.setState({header: res.data[0]})
-            
+            if (res.data.length > 0){
+                this.setState({header: res.data[0]})
+            }
         } catch (err){
            console.error(err)
         }
@@ -207,7 +208,7 @@ class InputDragDrop1 extends React.Component {
         return (
             <div className="dragdrop-container">
                 {this.props.order_number 
-                    ? <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '5%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
+                    ? <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '25%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
                     : null
                 }
                 <div className="user-input">
@@ -215,7 +216,7 @@ class InputDragDrop1 extends React.Component {
                         type="text"
                         placeholder="Type a header..." 
                         className="header"
-                        value={isPublished ? this.state.header.text : header && header.text ? header.text : ""}
+                        value={isPublished && this.state.header.text ? this.state.header.text : header && header.text ? header.text : ""}
                         onChange={this.handleChangeHeader}
                         onBlur={this.handleBlurHeader}
                         disabled={isPublished ? true : false}

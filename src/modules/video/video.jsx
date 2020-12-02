@@ -3,20 +3,20 @@ import './video.scss';
 import axios from 'axios';
 import { API_URL } from '../../apiConfig';
 import { connect } from 'react-redux';
-import { getHeader, addHeader, changeHeader, updateHeader } from '../../duck/actions/videoAction';
+import { getHeader, addHeader, changeHeader, updateHeader, addVideo, changeVideo, changeLink, updateVideo, getVideo } from '../../duck/actions/videoAction';
 
 class Video extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            video: null,
+            // video: null,
             header: "",
             have_link: false,
             have_video: false,
             video_uploaded: false,
             link_uploaded: false,
             show_link: false,
-            link: "",
+            // link: "",
             uploaded_link: ""
         }
         this.handleChangeVideo = this.handleChangeVideo.bind(this)
@@ -29,51 +29,35 @@ class Video extends React.Component {
     }
 
     componentDidMount(){
-        this.props.getHeader(this.props.sessionID)
-        this.getVideo(this.props.sessionID)
+        if (this.props.sessionID && this.props.isPublished){
+            this.props.getHeader(this.props.sessionID)
+            this.getVideo(this.props.sessionID)
+        }
     }
 
     async getVideo(sessionID){
         try {
             const res = await axios.get(`${API_URL}/video/session/${sessionID}`)
             console.log('res in getting video', res.data)
-            this.setState({uploaded_link: res.data.video_url})
+            if (res.data && res.data.id){
+                this.setState({uploaded_link: res.data.video_url})
+            }
         } catch (err){
             console.error(err)
         }
     }
-
-    async postVideo(videoData){
-        try {
-            const res = await axios.post(`${API_URL}/video/session/${this.props.sessionID}`, videoData, 
-                                    {
-                                    //     withCredentials: true,
-                                        headers: {
-                                        'Content-Type': 'multipart/form-data'
-                                            }
-                                    }
-                                )
-            console.log('res in uploading video', res.data)
-        } catch (err){
-            console.error(err)
-        }
-    }
-
 
     handleChangeVideo(e){
         const video = e.target.files[0]
         this.setState({
-            video: video,
             have_video: true,
             video_uploaded: true
         })
-        console.log('video', video)
+        this.props.changeVideo(video)
 
         const formData = new FormData()
         formData.append('file', video)
-        this.postVideo(formData)
-    
-
+        this.props.addVideo(formData)
     }
 
     enterlink(){
@@ -84,10 +68,10 @@ class Video extends React.Component {
 
     handleChangeLink(e){
         this.setState({
-            link: e.target.value,
             have_link: true,
             link_uploaded: true
         })
+        this.props.changeLink(e.target.value)
     }
 
     handleReplaceVideo(){
@@ -97,9 +81,9 @@ class Video extends React.Component {
             show_link: false,
             video_uploaded: false,
             link_uploaded: false,
-            video: null,
-            link: ""
+            video: null
         })
+        this.props.changeLink("")
     }
 
     isValidUrl(string) {
@@ -135,9 +119,9 @@ class Video extends React.Component {
 
     render(){
 
-        const { have_link, have_video, link, video, video_uploaded, link_uploaded, show_link } = this.state;
+        const { have_link, have_video,  video_uploaded, link_uploaded, show_link } = this.state;
 
-        const { header, isPublished } = this.props;
+        const { header, isPublished, video_file, link, video } = this.props;
 
         return (
             <div className="video-container">
@@ -188,7 +172,7 @@ class Video extends React.Component {
                         className="video" 
                         width="760" 
                         height="515" 
-                        src= {video !== null? URL.createObjectURL(video) : link.length > 0 && this.isValidUrl(link) ? link.replace("watch?v=", "embed/") : this.state.uploaded_link} 
+                        src= {video && video.id ? video.video_url : video_file !== null? URL.createObjectURL(video_file) : link.length > 0 && this.isValidUrl(link) ? link.replace("watch?v=", "embed/") : this.state.uploaded_link.length > 0 ? this.state.uploaded_link : ""} 
                         frameBorder="0" 
                         allowFullScreen scrolling="no"></iframe>
                     
@@ -202,9 +186,12 @@ const mapStateToProps = state => {
     console.log('check state in video', state)
     return {
         header: state.videoReducer.header,
-        isPublished: state.courseReducer.isPublished
+        isPublished: state.courseReducer.isPublished,
+        video_file: state.videoReducer.video_file,
+        link: state.videoReducer.link,
+        video: state.videoReducer.video
     }
 }
 
-export default connect(mapStateToProps, { getHeader, addHeader, changeHeader, updateHeader })(Video);
+export default connect(mapStateToProps, { getHeader, addHeader, changeHeader, updateHeader, addVideo, changeLink, changeVideo, getVideo, updateVideo })(Video);
 
