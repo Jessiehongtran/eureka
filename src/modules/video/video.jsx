@@ -2,22 +2,10 @@ import React from 'react';
 import './video.scss';
 import axios from 'axios';
 import { API_URL } from '../../apiConfig';
-import S3FileUpload from 'react-s3';
- 
-//Optional Import
-import { uploadFile } from 'react-s3';
- 
-const config = {
-    bucketName: 'testampcreative',
-    region: 'us-east-2',
-    accessKeyId: 'AKIAJZARDZTJIOX4QZQA',
-    secretAccessKey: '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',
-}
+import { connect } from 'react-redux';
+import { getHeader, addHeader, changeHeader, updateHeader } from '../../duck/actions/videoAction';
 
-console.log('check ACCESS KEY', config)
-
-
-export default class Video extends React.Component {
+class Video extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -32,7 +20,8 @@ export default class Video extends React.Component {
             uploaded_link: ""
         }
         this.handleChangeVideo = this.handleChangeVideo.bind(this)
-        this.saveHeader = this.saveHeader.bind(this)
+        this.handleChangeHeader = this.handleChangeHeader.bind(this)
+        this.handleBlurHeader = this.handleBlurHeader.bind(this)
         this.enterlink = this.enterlink.bind(this)
         this.handleChangeLink = this.handleChangeLink.bind(this)
         this.handleReplaceVideo = this.handleReplaceVideo.bind(this)
@@ -40,12 +29,13 @@ export default class Video extends React.Component {
     }
 
     componentDidMount(){
-        this.getVideo()
+        this.props.getHeader(this.props.sessionID)
+        this.getVideo(this.props.sessionID)
     }
 
-    async getVideo(){
+    async getVideo(sessionID){
         try {
-            const res = await axios.get(`${API_URL}/video/session/${this.props.sessionID}`)
+            const res = await axios.get(`${API_URL}/video/session/${sessionID}`)
             console.log('res in getting video', res.data)
             this.setState({uploaded_link: res.data.video_url})
         } catch (err){
@@ -86,10 +76,6 @@ export default class Video extends React.Component {
 
     }
 
-    saveHeader(e){
-        this.setState({header: e.target.value})
-    }
-
     enterlink(){
         this.setState({
             show_link: true
@@ -126,16 +112,32 @@ export default class Video extends React.Component {
         return true;
       }
 
-    handleChange(){
-        
+    handleChangeHeader(e){
+        this.props.changeHeader({
+            text: e.target.value
+        })
+    }
+
+    handleBlurHeader(e, headerID){
+        if (headerID){
+            //update header
+            this.props.updateHeader({ text: e.target.value}, headerID )
+        } else {
+            //post header
+            const header = {
+                text: e.target.value,
+                sessionID: this.props.sessionID
+            }
+            this.props.addHeader(header)
+        }
     }
 
 
     render(){
-        console.log('videourl', this.state.videoUrl)
+
         const { have_link, have_video, link, video, video_uploaded, link_uploaded, show_link } = this.state;
 
-        console.log('have_link', have_link, 'have_video', have_video)
+        const { header } = this.props;
 
         return (
             <div className="video-container">
@@ -147,8 +149,9 @@ export default class Video extends React.Component {
                     <input
                         type="text"
                         placeholder="Header for video"
-                        onChange={this.handleChange}
-                        onBlur= {this.saveHeader}
+                        value={ header && header.text ? header.text : "" }
+                        onChange={this.handleChangeHeader}
+                        onBlur= {e => this.handleBlurHeader(e, header.id)}
                     />
                 </div>
                 <div className="upload">
@@ -192,4 +195,13 @@ export default class Video extends React.Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    console.log('check state in video', state)
+    return {
+        header: state.videoReducer.header
+    }
+}
+
+export default connect(mapStateToProps, { getHeader, addHeader, changeHeader, updateHeader })(Video);
 

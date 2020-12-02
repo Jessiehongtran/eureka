@@ -292,6 +292,7 @@ class CreateCourse extends React.Component {
         } 
         else if (moduleID === 6){
             this.setState({ componentToDisplay: <Video sessionID={sessionID} order_number={order_number} />})
+           
         } 
         else if (moduleID === 7){
             this.setState({ componentToDisplay: <WordRain sessionID={sessionID} order_number={order_number} />})
