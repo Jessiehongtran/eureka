@@ -105,7 +105,7 @@ export default class DragDrop2 extends React.Component {
         const { answers } = this.state;
 
         return (
-            <div className="container">
+            <div className="dragdrop2-container">
                 <input
                     type="text"
                     placeholder="Type a question..."

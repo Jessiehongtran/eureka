@@ -1,9 +1,10 @@
-.container {
+.type-container {
     display: flex;
-    // flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
+    padding-top: 80px;
 
     .display-site {
         background-color: #60B6D4 ;

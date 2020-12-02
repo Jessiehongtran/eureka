@@ -16,7 +16,7 @@ export const getHeader = (sessionID) => {
     return async dispatch => {
         try {
             const res = await axios.get(`${API_URL}/text/session/${sessionID}`)
-            console.log('res in getting header of video', res.data)
+            console.log('res in getting header of video within redux', res.data)
             if (res.data.length > 0){
                 dispatch({
                     type: GET_HEADER_SUCCESS,
@@ -98,10 +98,10 @@ export const getVideo = (sessionID) => {
     }
 }
 
-export const addVideo = (videoData) => {
+export const addVideo = (videoData, sessionID) => {
     return async dispatch => {
         try {
-            const res = await axios.post(`${API_URL}/video/session/${this.props.sessionID}`, videoData, 
+            const res = await axios.post(`${API_URL}/video/session/${sessionID}`, videoData, 
                                     {
                                         headers: {'Content-Type': 'multipart/form-data'}
                                     }

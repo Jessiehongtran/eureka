@@ -10,14 +10,14 @@ class Video extends React.Component {
         super(props);
         this.state = {
             // video: null,
-            header: "",
+            header: {},
             have_link: false,
             have_video: false,
             video_uploaded: false,
             link_uploaded: false,
             show_link: false,
             // link: "",
-            uploaded_link: ""
+            uploaded_link: null
         }
         this.handleChangeVideo = this.handleChangeVideo.bind(this)
         this.handleChangeHeader = this.handleChangeHeader.bind(this)
@@ -29,18 +29,32 @@ class Video extends React.Component {
     }
 
     componentDidMount(){
+        console.log('video component mount')
         if (this.props.sessionID && this.props.isPublished){
-            this.props.getHeader(this.props.sessionID)
+            this.getHeader(this.props.sessionID)
             this.getVideo(this.props.sessionID)
+        }
+    }
+
+    async getHeader(sessionID){
+        try {
+            const res = await axios.get(`${API_URL}/text/session/${sessionID}`)
+            if (res.data.length > 0){
+                this.setState({ header: res.data[0] })
+            } 
+        } catch (err){
+            console.error(err)
         }
     }
 
     async getVideo(sessionID){
         try {
             const res = await axios.get(`${API_URL}/video/session/${sessionID}`)
-            console.log('res in getting video', res.data)
+            console.log('res in getting video within component', res.data)
             if (res.data && res.data.id){
                 this.setState({uploaded_link: res.data.video_url})
+            } else {
+                this.setState({uploaded_link: ""})
             }
         } catch (err){
             console.error(err)
@@ -57,7 +71,7 @@ class Video extends React.Component {
 
         const formData = new FormData()
         formData.append('file', video)
-        this.props.addVideo(formData)
+        this.props.addVideo(formData, this.props.sessionID)
     }
 
     enterlink(){
@@ -119,9 +133,13 @@ class Video extends React.Component {
 
     render(){
 
-        const { have_link, have_video,  video_uploaded, link_uploaded, show_link } = this.state;
+        const { have_link, have_video,  video_uploaded, link_uploaded, show_link, uploaded_link } = this.state;
 
-        const { header, isPublished, video_file, link, video } = this.props;
+        const { header, isPublished, link, video,  video_file } = this.props;
+
+        console.log('uploaded_link', uploaded_link)
+        console.log('video_file', video_file)
+        console.log('video', video)
 
         return (
             <div className="video-container">
@@ -133,9 +151,10 @@ class Video extends React.Component {
                     <input
                         type="text"
                         placeholder="Header for video"
-                        value={ header && header.text ? header.text : "" }
+                        value={ this.state.header.text ? this.state.header.text : header && header.text ? header.text : "" }
                         onChange={this.handleChangeHeader}
                         onBlur= {e => this.handleBlurHeader(e, header.id)}
+                        disabled={ isPublished ? true : false }
                     />
                 </div>
                 {!isPublished
@@ -146,7 +165,7 @@ class Video extends React.Component {
                         <input
                             type="file" 
                             onChange={this.handleChangeVideo}
-
+                            
                         />
                     </label>
                     : video_uploaded ? <button className="change-btn" onClick={() => this.handleReplaceVideo()}>Change video</button> : null}
@@ -172,7 +191,7 @@ class Video extends React.Component {
                         className="video" 
                         width="760" 
                         height="515" 
-                        src= {video && video.id ? video.video_url : video_file !== null? URL.createObjectURL(video_file) : link.length > 0 && this.isValidUrl(link) ? link.replace("watch?v=", "embed/") : this.state.uploaded_link.length > 0 ? this.state.uploaded_link : ""} 
+                        src= {uploaded_link !== null ? uploaded_link : video && video.id ? video.video_url : video_file !== null? URL.createObjectURL(video_file) : link.length > 0 && this.isValidUrl(link) ? link.replace("watch?v=", "embed/") : ""} 
                         frameBorder="0" 
                         allowFullScreen scrolling="no"></iframe>
                     

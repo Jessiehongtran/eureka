@@ -94,9 +94,10 @@ class Quiz extends React.Component {
 
     render(){
 
-        const { question, choices, image, showUploadFunc, image_uploading } = this.props;
+        const { isPublished, question, choices, image, showUploadFunc, image_uploading } = this.props;
 
         console.log('props in quiz', this.props)
+        console.log('check isPublished in quiz', isPublished)
 
         return (
             <div className="quiz">
@@ -111,7 +112,7 @@ class Quiz extends React.Component {
                         value={question.question_text}
                         onChange={e => this.handleChangeQuestion(e, question.id)}
                         onBlur= {e => this.handleBlurQuestion(e, question.id)}
-                        // disabled={isPublished ? true : false}
+                        disabled={isPublished ? true : false}
                     />
                     {!showUploadFunc 
                     ? !image_uploading
@@ -125,7 +126,7 @@ class Quiz extends React.Component {
                             <img 
                                 src={image.image_url} 
                             className="image-frame" />
-                        </div>
+                          </div>
                       : <p>loading the image...</p>
                     : <div className="image">
                         <p>Image goes here</p>
@@ -149,7 +150,7 @@ class Quiz extends React.Component {
                                     value={choice.choice_text}
                                     onChange={e=> this.handleChangeAnswer(e, choice.id)}
                                     onBlur= {e => this.handleBlurAnswer(e, choice.id, choice.sessionID)}
-                                    // disabled={isPublished ? true : false}
+                                    disabled={isPublished ? true : false}
                                 />
                                 <input 
                                     type="radio"
@@ -175,7 +176,8 @@ const mapStateToProps = state => {
         choices: state.quizReducer.choices,
         image: state.quizReducer.image,
         showUploadFunc: state.quizReducer.showUploadFunc,
-        image_uploading: state.quizReducer.image_uploading
+        image_uploading: state.quizReducer.image_uploading,
+        isPublished: state.courseReducer.isPublished
     }
 }
 

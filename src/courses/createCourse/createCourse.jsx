@@ -16,7 +16,7 @@ import VideoMini from '../../modules/video/mini/video.mini';
 import { publishCourse } from '../../duck/actions/courseActions';
 import { getQuestion, getChoices, getImage } from '../../duck/actions/quizActions';
 import { getHeader, getCategory } from '../../duck/actions/dragdropActions';
-import { getVideo } from '../../duck/actions/videoAction';
+import { getVideo, changeVideo } from '../../duck/actions/videoAction';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { faClone } from '@fortawesome/free-regular-svg-icons';
@@ -295,6 +295,7 @@ class CreateCourse extends React.Component {
             this.setState({ componentToDisplay: <Video sessionID={sessionID} order_number={order_number} />})
             this.props.getHeader(sessionID)
             this.props.getVideo(sessionID)
+            this.props.changeVideo(null)
         } 
         else if (moduleID === 7){
             this.setState({ componentToDisplay: <WordRain sessionID={sessionID} order_number={order_number} />})
@@ -411,7 +412,7 @@ class CreateCourse extends React.Component {
                     </button>
                     <button 
                         className="publish-btn"
-                        onClick={() => this.props.publishCourse(true, this.props.match.params.courseID, this.props.history)}
+                        onClick={() => setTimeout(function(){this.props.publishCourse(true, this.props.match.params.courseID, this.props.history)}.bind(this), 1000)}
                     >
                         Publish course
                     </button>
@@ -441,4 +442,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices, getHeader, getCategory, getImage, getVideo })(CreateCourse);
+export default connect(mapStateToProps, { publishCourse, getQuestion, getChoices, getHeader, getCategory, getImage, getVideo, changeVideo })(CreateCourse);

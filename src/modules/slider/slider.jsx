@@ -18,7 +18,11 @@ export default class Slider extends React.Component {
         const { sliderRange } = this.state
 
         return (
-            <div className="container">
+            <div className="slider-container">
+                {this.props.order_number 
+                        ? <h1 style={{color: 'silver', textAlign: 'left', width: '100%', left: '25%', top: '10px', position: 'absolute'}}>#{this.props.order_number}</h1>
+                        : null
+                    }
                 <div className="wrapper">
                     <div className="slider-container">
                         <input
