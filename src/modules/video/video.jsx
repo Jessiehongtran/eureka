@@ -137,7 +137,7 @@ class Video extends React.Component {
 
         const { have_link, have_video, link, video, video_uploaded, link_uploaded, show_link } = this.state;
 
-        const { header } = this.props;
+        const { header, isPublished } = this.props;
 
         return (
             <div className="video-container">
@@ -154,7 +154,8 @@ class Video extends React.Component {
                         onBlur= {e => this.handleBlurHeader(e, header.id)}
                     />
                 </div>
-                <div className="upload">
+                {!isPublished
+                ? <div className="upload">
                     {!have_video && !have_link
                     ? <label className="video-upload">
                         Upload video
@@ -178,9 +179,10 @@ class Video extends React.Component {
                             onChange={this.handleChangeLink}
                         />
                         : null}
-                     </label>
+                    </label>
                     : link_uploaded ? <button className="change-btn" onClick={() => this.handleReplaceVideo()}>Change video</button> : null}
                 </div>
+                : null}
                 <div className="video-prev">
                     <iframe 
                         className="video" 
@@ -199,7 +201,8 @@ class Video extends React.Component {
 const mapStateToProps = state => {
     console.log('check state in video', state)
     return {
-        header: state.videoReducer.header
+        header: state.videoReducer.header,
+        isPublished: state.courseReducer.isPublished
     }
 }
 
