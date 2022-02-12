@@ -414,7 +414,7 @@ class CreateCourse extends React.Component {
                         className="publish-btn"
                         onClick={() => setTimeout(function(){this.props.publishCourse(true, this.props.match.params.courseID, this.props.history)}.bind(this), 1000)}
                     >
-                        Publish course
+                        Preview course
                     </button>
                 </div>
                 <div className="content-editor">
